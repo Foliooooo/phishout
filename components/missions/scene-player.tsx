@@ -1,6 +1,7 @@
 "use client";
 
 import { games, learningFor, type Game } from "@/lib/games";
+import { levelOf } from "@/lib/levels";
 import { Lumi } from "@/components/lumi";
 import type { MissionReport, MissionSite, PublicScene, ReviewItem, SceneMissionView } from "@/lib/missions/types";
 import { cn } from "@/lib/utils";
@@ -363,6 +364,12 @@ function EvidencePanel({ scene, busy, onTag, onClose }: { scene: PublicScene; bu
           ))}
         </ul>
       </div>
+      {/* On small screens the sheet covers the page’s choices: give a clear way back to them. */}
+      <div className="shrink-0 border-t border-white/[0.06] p-2 lg:hidden">
+        <button type="button" onClick={onClose} className="flex h-11 w-full items-center justify-center rounded-lg bg-white text-[14px] font-semibold text-zinc-900 hover:bg-zinc-200">
+          Done flagging{flagged ? ` (${flagged})` : ""}, back to the page
+        </button>
+      </div>
     </motion.aside>
   );
 }
@@ -460,8 +467,11 @@ function verdict(xp: number) {
 
 /** Lumi reacts to the score and points at the next mission. */
 function DebriefGuide({ game, xp }: { game: Game; xp: number }) {
-  const index = games.findIndex(item => item.slug === game.slug);
-  const next = index >= 0 ? games[(index + 1) % games.length] : games[0];
+  // Suggest the next mission at the same level, so a Novice isn’t sent to a locked Expert one.
+  const level = levelOf(game.slug);
+  const peers = games.filter(item => levelOf(item.slug) === level);
+  const index = peers.findIndex(item => item.slug === game.slug);
+  const next = index >= 0 ? peers[(index + 1) % peers.length] : games[0];
   const takeaway = learningFor(game.slug)?.takeaways[xp >= 75 ? 2 : 1];
   const line = xp >= 75
     ? `Clean catch. You saw the lure for what it was.${takeaway ? ` One more habit to keep: ${takeaway}` : ""}`
@@ -491,7 +501,7 @@ function ArcadeResult({ arcade, bossBeaten, title }: { arcade: SceneMissionView[
       : { label: "Survived", note: "You made it to the end, but the boss got a bite in.", tone: "text-[#f5a524]", ring: "ring-[#f5a524]/40 bg-[#f5a524]/10" };
   return (
     <motion.div
-      className={cn("mb-5 flex flex-wrap items-center gap-4 rounded-xl p-4 ring-1", outcome.ring)}
+      className={cn("mb-5 flex flex-col gap-4 rounded-xl p-4 ring-1 sm:flex-row sm:items-center", outcome.ring)}
       initial={still ? false : { scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ type: "spring", stiffness: 240, damping: 18 }}
@@ -501,7 +511,7 @@ function ArcadeResult({ arcade, bossBeaten, title }: { arcade: SceneMissionView[
         <p className={cn("text-[28px] font-bold tracking-tight", outcome.tone)}>{outcome.label}</p>
         <p className="text-[13px] text-zinc-400">{outcome.note}</p>
       </div>
-      <dl className="flex gap-5 text-right">
+      <dl className="grid grid-cols-3 gap-3 sm:flex sm:gap-5 sm:text-right">
         <div><dt className="text-[11px] text-zinc-500">Arcade score</dt><dd className="text-[24px] font-bold text-[#f5a524] tabular-nums"><CountUp value={arcade.score} duration={1.4} /></dd></div>
         <div><dt className="text-[11px] text-zinc-500">Best combo</dt><dd className="text-[24px] font-bold tabular-nums">{Math.min(arcade.best, 3)}×</dd></div>
         <div><dt className="text-[11px] text-zinc-500">Lives left</dt><dd className="text-[24px] font-bold tabular-nums">{arcade.lives}/{arcade.livesMax}</dd></div>

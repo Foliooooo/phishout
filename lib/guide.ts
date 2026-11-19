@@ -77,8 +77,9 @@ export function gameLines(slug: string): GuideLine[] {
   const game = slug === endlessGame.slug ? endlessGame : getGame(slug);
   const learning = learningFor(slug);
   if (!game) return [];
-  const index = games.findIndex(item => item.slug === slug);
-  const next = index >= 0 ? games[(index + 1) % games.length] : games[0];
+  const peers = games.filter(item => levelOf(item.slug) === levelOf(slug));
+  const index = peers.findIndex(item => item.slug === slug);
+  const next = index >= 0 ? peers[(index + 1) % peers.length] : games[0];
   const level = slug === "endless" ? "expert" : levelOf(slug);
   const lines: GuideLine[] = [
     { text: `${LEVELS[level].title} mission. ${game.title} trains ${(learning ? list(learning.skills) : game.skill).toLowerCase()}. ${game.objective}`, href: `/games/${slug}/play`, cta: `Play ${game.title}` },

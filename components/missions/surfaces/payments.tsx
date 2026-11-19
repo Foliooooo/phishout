@@ -21,8 +21,10 @@ function PaymentsSurface({ view, scene, site, busy, opened, open, start, inspect
   const showing = Boolean(scene && opened);
 
   return (
-    <div className="flex h-full justify-center overflow-y-auto bg-[#eceaf3] px-3 py-4 text-[#1b1530]">
-      <div className="relative flex w-full max-w-[420px] flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_8px_40px_rgba(27,21,48,0.12)] ring-1 ring-black/5">
+    // items-start lets the card grow with its content, so the outer area scrolls
+    // on short screens instead of the card clipping its own buttons.
+    <div className="flex h-full items-start justify-center overflow-y-auto overscroll-contain bg-[#eceaf3] px-2 py-3 text-[#1b1530] sm:px-3 sm:py-4">
+      <div className="relative flex min-h-full w-full max-w-[420px] flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_8px_40px_rgba(27,21,48,0.12)] ring-1 ring-black/5">
         {/* App bar */}
         <header className="flex items-center gap-3 px-5 pt-5 pb-4 text-white" style={{ background: BRAND }}>
           <span className="flex size-9 items-center justify-center rounded-xl bg-white/15 text-[15px] font-bold">P</span>
