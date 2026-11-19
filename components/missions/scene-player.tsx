@@ -6,7 +6,8 @@ import type { MissionReport, MissionSite, PublicScene, ReviewItem, SceneMissionV
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { useCallback, useState, type ComponentType, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ComponentType, type ReactNode } from "react";
+import { ArcadeBar, ArcadeLineView, BossIntro } from "./arcade";
 import { BrowserChrome, splitHost, type ChromeTab } from "./browser-chrome";
 import { CoachPanel, CoachReport } from "./coach";
 import { Confetti, CountUp, GameFrame, LoadingStage, ProblemStage } from "./frame";
@@ -53,6 +54,7 @@ export function ScenePlayer({ game, skin }: { game: Game; skin: Skin }) {
   const [boardOpen, setBoardOpen] = useState(true);
   const [siteInfo, setSiteInfo] = useState(false);
   const [coachOpen, setCoachOpen] = useState(false);
+  const [bossSeen, setBossSeen] = useState(false);
 
   // Resuming a run mid-way should not replay feedback that was already seen.
   const acknowledged = seen ?? view?.step ?? 0;
@@ -60,6 +62,14 @@ export function ScenePlayer({ game, skin }: { game: Game; skin: Skin }) {
   const scene = view?.scene ?? null;
   const feedback = view && view.step > acknowledged ? view.feedback : null;
   const showDebrief = Boolean(view?.complete && !feedback);
+  const arcade = view?.arcade;
+  const bossIntro = Boolean(view?.started && !view.complete && !feedback && arcade?.boss && !bossSeen);
+
+  // Start the situation’s clock once the player can actually see it (not under feedback or the boss intro).
+  const clockStopped = Boolean(view?.started && !view.complete && !feedback && !bossIntro && arcade && arcade.elapsed === null);
+  useEffect(() => {
+    if (clockStopped && view) void send({ kind: "begin", stage: view.step });
+  }, [clockStopped, send, view]);
 
   const start = useCallback(() => {
     if (!view) return;
@@ -103,6 +113,7 @@ export function ScenePlayer({ game, skin }: { game: Game; skin: Skin }) {
 
   const restart = async () => {
     setSeen(null);
+    setBossSeen(false);
     setOpenedStep(null);
     setOverride(null);
     await mission.open(true);
@@ -132,7 +143,9 @@ export function ScenePlayer({ game, skin }: { game: Game; skin: Skin }) {
       coachOpen={coachOpen}
       evidenceCount={clues?.filter(clue => clue.tagged).length}
     >
-      <div className="flex h-full min-h-0 gap-3">
+      <div className="flex h-full min-h-0 flex-col">
+      {view.started && !view.complete && <ArcadeBar arcade={view.arcade} step={step} accent={skin.accent} />}
+      <div className="flex min-h-0 flex-1 gap-3">
         <BrowserChrome
           className="min-w-0 flex-1"
           tabs={tabs}
@@ -170,6 +183,11 @@ export function ScenePlayer({ game, skin }: { game: Game; skin: Skin }) {
           )}
         </AnimatePresence>
       </div>
+      </div>
+
+      <AnimatePresence>
+        {bossIntro && <BossIntro onGo={() => { play("alarm"); setBossSeen(true); }} />}
+      </AnimatePresence>
 
       <AnimatePresence>
         {coachOpen && view.started && !view.complete && !feedback && <CoachPanel step={step} ask={mission.coach} onClose={() => setCoachOpen(false)} />}
@@ -180,11 +198,15 @@ export function ScenePlayer({ game, skin }: { game: Game; skin: Skin }) {
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {feedback && <Feedback key={`f${step}`} item={feedback} last={view.complete} onNext={continueOn} />}
+        {feedback && (
+          <Feedback key={`f${step}`} item={feedback} last={view.complete} onNext={continueOn}>
+            {view.arcade.lines[step - 1] && <ArcadeLineView line={view.arcade.lines[step - 1]} lives={view.arcade.lives} livesMax={view.arcade.livesMax} correct={feedback.correct} />}
+          </Feedback>
+        )}
       </AnimatePresence>
       <AnimatePresence>
         {showDebrief && view.review && (
-          <Debrief game={game} accent={skin.accent} review={view.review} xp={view.xp} saved={mission.saved} onReplay={() => void restart()} loadReport={mission.report} />
+          <Debrief game={game} accent={skin.accent} review={view.review} xp={view.xp} arcade={view.arcade} saved={mission.saved} onReplay={() => void restart()} loadReport={mission.report} />
         )}
       </AnimatePresence>
     </GameFrame>
@@ -268,7 +290,12 @@ function Briefing({ game, site, accent, onGo }: { game: Game; site: MissionSite;
               <p className="mt-2 text-[12px] leading-relaxed text-zinc-500">{learningFor(game.slug)!.realWorld}</p>
             </div>
           )}
-          <dl className="mt-5 grid grid-cols-3 text-[12px]">
+          <ul className="mt-5 flex flex-wrap gap-1.5 text-[12px]" aria-label="Arcade rules">
+            {["2 lives", "Combos up to 3×", "Time bonus", "Boss round last, 2× points", "Shuffled every run"].map(rule => (
+              <li key={rule} className="rounded-md bg-[#f5a524]/10 px-2 py-0.5 font-medium text-[#f5a524]">{rule}</li>
+            ))}
+          </ul>
+          <dl className="mt-4 grid grid-cols-3 text-[12px]">
             {[["Decisions", "up to 75 XP"], ["Evidence", "up to 25 XP"], ["False flags", "cost evidence XP"]].map(([term, detail]) => (
               <div key={term} className="border-l border-white/[0.08] pl-3 first:border-l-0 first:pl-0">
                 <dt className="text-zinc-500">{term}</dt>
@@ -340,7 +367,7 @@ function EvidencePanel({ scene, busy, onTag, onClose }: { scene: PublicScene; bu
   );
 }
 
-function Feedback({ item, last, onNext }: { item: ReviewItem; last: boolean; onNext: () => void }) {
+function Feedback({ item, last, onNext, children }: { item: ReviewItem; last: boolean; onNext: () => void; children?: ReactNode }) {
   const missed = item.clues.filter(clue => clue.explanation && !clue.tagged);
   const falseFlags = item.clues.filter(clue => !clue.explanation && clue.tagged);
   const caught = item.clues.filter(clue => clue.explanation && clue.tagged);
@@ -376,6 +403,7 @@ function Feedback({ item, last, onNext }: { item: ReviewItem; last: boolean; onN
             </div>
           ))}
         </dl>
+        {children}
 
         <div className="max-h-[38vh] space-y-4 overflow-y-auto px-6 pt-5">
           {!item.inspected && (
@@ -453,8 +481,37 @@ function DebriefGuide({ game, xp }: { game: Game; xp: number }) {
   );
 }
 
-function Debrief({ game, review, xp, saved, accent, onReplay, loadReport }: {
-  game: Game; review: ReviewItem[]; xp: number; saved: { xp: number; correct: boolean } | null | undefined; accent: string; onReplay: () => void;
+/** The headline of the results: hooked, boss beaten, or survived, with the arcade score. */
+function ArcadeResult({ arcade, bossBeaten, title }: { arcade: SceneMissionView["arcade"]; bossBeaten: boolean; title: string }) {
+  const still = useReducedMotion();
+  const outcome = arcade.hooked
+    ? { label: "Hooked", note: "Two wrong calls and the phisher reeled you in before the boss.", tone: "text-[#ff6369]", ring: "ring-[#e5484d]/40 bg-[#e5484d]/10" }
+    : bossBeaten
+      ? { label: "Boss beaten", note: "You saw through the final, sneakiest one.", tone: "text-[#3dd68c]", ring: "ring-[#30a46c]/40 bg-[#30a46c]/10" }
+      : { label: "Survived", note: "You made it to the end, but the boss got a bite in.", tone: "text-[#f5a524]", ring: "ring-[#f5a524]/40 bg-[#f5a524]/10" };
+  return (
+    <motion.div
+      className={cn("mb-5 flex flex-wrap items-center gap-4 rounded-xl p-4 ring-1", outcome.ring)}
+      initial={still ? false : { scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 240, damping: 18 }}
+    >
+      <div className="min-w-0 flex-1">
+        <p className="text-[12px] text-zinc-500">Mission complete · {title}</p>
+        <p className={cn("text-[28px] font-bold tracking-tight", outcome.tone)}>{outcome.label}</p>
+        <p className="text-[13px] text-zinc-400">{outcome.note}</p>
+      </div>
+      <dl className="flex gap-5 text-right">
+        <div><dt className="text-[11px] text-zinc-500">Arcade score</dt><dd className="text-[24px] font-bold text-[#f5a524] tabular-nums"><CountUp value={arcade.score} duration={1.4} /></dd></div>
+        <div><dt className="text-[11px] text-zinc-500">Best combo</dt><dd className="text-[24px] font-bold tabular-nums">{Math.min(arcade.best, 3)}×</dd></div>
+        <div><dt className="text-[11px] text-zinc-500">Lives left</dt><dd className="text-[24px] font-bold tabular-nums">{arcade.lives}/{arcade.livesMax}</dd></div>
+      </dl>
+    </motion.div>
+  );
+}
+
+function Debrief({ game, review, xp, arcade, saved, accent, onReplay, loadReport }: {
+  game: Game; review: ReviewItem[]; xp: number; arcade: SceneMissionView["arcade"]; saved: { xp: number; correct: boolean } | null | undefined; accent: string; onReplay: () => void;
   loadReport: () => Promise<MissionReport | { error: string } | null>;
 }) {
   const caught = review.reduce((sum, item) => sum + item.clues.filter(clue => clue.explanation && clue.tagged).length, 0);
@@ -465,7 +522,7 @@ function Debrief({ game, review, xp, saved, accent, onReplay, loadReport }: {
     <motion.div className="absolute inset-0 z-50 overflow-y-auto bg-[#0f0f12] p-4 sm:p-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       {xp >= 75 && <Confetti accent={accent} />}
       <section role="dialog" aria-modal="true" aria-labelledby="debrief-title" className="mx-auto max-w-2xl py-4">
-        <p className="text-[13px] text-zinc-500">Mission complete · {game.title}</p>
+        <ArcadeResult arcade={arcade} bossBeaten={Boolean(review.at(-1)?.correct)} title={game.title} />
         <div className="mt-2 flex flex-wrap items-baseline gap-x-3">
           <h2 id="debrief-title" className="text-[44px] font-semibold tracking-tight tabular-nums">
             <CountUp value={xp} duration={1.2} />

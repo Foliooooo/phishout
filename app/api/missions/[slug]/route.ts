@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { geminiConfigured } from "@/lib/gemini";
 import { coachHint, missionReport, rileyReply } from "@/lib/missions/ai";
-import { GenerationLimited, applyEvent, directMissions, loadRun, openRun, recordHint, saveReport, view } from "@/lib/missions/runs";
+import { GenerationLimited, applyEvent, directMissions, loadRun, openRun, recordHint, saveReport, scenesOf, view } from "@/lib/missions/runs";
 import { predictForPlayer } from "@/lib/prediction";
 import { isSuperAdmin } from "@/lib/levels";
 import { lockedMessage, missionLocked } from "@/lib/progress";
@@ -9,7 +9,7 @@ import type { RunResponse } from "@/lib/missions/types";
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-const SCENE_EVENTS = new Set(["start", "inspect", "tag", "act"]);
+const SCENE_EVENTS = new Set(["start", "begin", "inspect", "tag", "act"]);
 const CHAT_EVENTS = new Set(["message", "notice", "read_mail", "inspect_link", "open_link", "dismiss", "confirm_plan", "report", "submit_demo", "rewind"]);
 
 /**
@@ -66,7 +66,7 @@ export async function POST(request: Request, { params }: RouteContext<"/api/miss
         const used = run.hints?.[String(current.step)] ?? 0;
         if (used >= 2 && !admin) return Response.json({ error: "You’ve used both hints for this situation." }, { status: 429 });
         const question = typeof body.question === "string" ? body.question.trim().slice(0, 200) || null : null;
-        const hint = await coachHint(slug, current.step, Boolean(current.scene?.inspected), question, run.custom).catch(() => null);
+        const hint = await coachHint(slug, current.step, Boolean(current.scene?.inspected), question, scenesOf(run)).catch(() => null);
         if (!hint) return Response.json({ error: "The coach couldn’t answer that. Try again." }, { status: 502 });
         await recordHint(run._id, current.step);
         return Response.json({ hint, remaining: admin ? 1 : 1 - used }, { headers: { "Cache-Control": "no-store" } });

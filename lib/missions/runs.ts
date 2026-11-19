@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { getDatabase } from "@/lib/mongodb";
 import { parseLearning } from "@/lib/learning";
 import { actCrush, newCrushState, scoreCrush, viewCrush, type CrushEvent, type CrushState } from "./crush";
-import { actMission, endlessSite, newMissionState, sceneMissions, scoreMission, viewMission, type MissionEvent, type MissionState, type Scene } from "./engine";
+import { actMission, dealDeck, endlessSite, newMissionState, sceneMissions, scoreMission, viewMission, type MissionEvent, type MissionState, type Scene } from "./engine";
 import { generateEndlessMission } from "./generate";
 import type { MissionReport } from "./ai";
 import type { MissionView } from "./types";
@@ -27,6 +27,8 @@ type Run = Owner & {
   hints?: Record<string, number>;
   /** Gemini-written situations for an Endless run. */
   custom?: Scene[];
+  /** This run’s shuffled copy of a built-in mission. */
+  deck?: Scene[];
   report?: MissionReport;
 };
 
@@ -39,14 +41,17 @@ const attempts = () => getDatabase().collection<{ _id: string }>("browser_attemp
 
 const isCrush = (slug: string) => slug === "crush-switch";
 
-export function view(run: Pick<Run, "slug" | "state" | "custom">): MissionView {
+/** The situations this run plays: Endless’s generated ones, the run’s shuffled deck, or the originals. */
+export const scenesOf = (run: Pick<Run, "custom" | "deck">) => run.custom ?? run.deck;
+
+export function view(run: Pick<Run, "slug" | "state" | "custom" | "deck">): MissionView {
   return isCrush(run.slug)
     ? viewCrush(run.state as CrushState)
-    : viewMission(run.slug, run.state as MissionState, run.custom, run.custom ? endlessSite : undefined);
+    : viewMission(run.slug, run.state as MissionState, scenesOf(run), run.custom ? endlessSite : undefined);
 }
 
-function score(run: Pick<Run, "slug" | "state" | "custom">) {
-  return isCrush(run.slug) ? scoreCrush(run.state as CrushState) : scoreMission(run.slug, run.state as MissionState, run.custom);
+function score(run: Pick<Run, "slug" | "state" | "custom" | "deck">) {
+  return isCrush(run.slug) ? scoreCrush(run.state as CrushState) : scoreMission(run.slug, run.state as MissionState, scenesOf(run));
 }
 
 /** Resumes the player's unfinished run of this mission, or opens a new one. */
@@ -68,8 +73,9 @@ export async function openRun(owner: Owner, slug: string, fresh: boolean, unlimi
     if (!allowed.modifiedCount && !unlimited) throw new GenerationLimited("Wait a few seconds before generating another mission.");
     custom = await generateEndlessMission();
   }
+  const deck = !custom && !isCrush(slug) ? dealDeck(slug) : undefined;
   const run: Run = {
-    _id: randomUUID(), ...owner, slug, ...(custom ? { custom } : {}),
+    _id: randomUUID(), ...owner, slug, ...(custom ? { custom } : {}), ...(deck ? { deck } : {}),
     state: isCrush(slug) ? newCrushState() : newMissionState(),
     rev: 0, createdAt: now, updatedAt: now,
   };
@@ -94,11 +100,11 @@ export async function applyEvent(run: Run, event: MissionEvent | CrushEvent) {
     const before = score(run);
     const state = isCrush(run.slug)
       ? actCrush(run.state as CrushState, event as CrushEvent)
-      : actMission(run.slug, run.state as MissionState, event as MissionEvent, run.custom);
+      : actMission(run.slug, run.state as MissionState, event as MissionEvent, scenesOf(run));
     if (state === run.state) return { run, saved: null };
 
     const now = new Date();
-    const after = score({ slug: run.slug, state, custom: run.custom });
+    const after = score({ slug: run.slug, state, custom: run.custom, deck: run.deck });
     const finishing = !before && after;
     const update = await runs().findOneAndUpdate(
       { _id: run._id, rev: run.rev },
@@ -117,6 +123,7 @@ export async function applyEvent(run: Run, event: MissionEvent | CrushEvent) {
             $set: {
               completedAt: now, closedAt: now, outcome: "direct_complete", answer: after.answer,
               correct: after.correct, xp: after.xp, scoringVersion: after.scoringVersion,
+              ...("arcade" in after ? { arcade: after.arcade, hooked: after.hooked } : {}),
               ...(learning ? { learning } : {}),
             },
           },

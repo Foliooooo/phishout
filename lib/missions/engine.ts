@@ -30,11 +30,46 @@ export type MissionState = {
   started: boolean;
   checked: boolean;
   tags: number[];
-  /** [action index, inspected, tagged clue indexes] per finished scene. */
+  /** [action index, inspected, tagged clue indexes] per finished scene. Action -1: not reached (out of lives). */
   choices: [number, boolean, number[]][];
+  /** Server time (ms) the current situation’s clock started. */
+  clockAt?: number;
+  /** Seconds taken on each finished situation (null: clock never started). */
+  times?: (number | null)[];
 };
 
-export const newMissionState = (): MissionState => ({ started: false, checked: false, tags: [], choices: [] });
+export const newMissionState = (): MissionState => ({ started: false, checked: false, tags: [], choices: [], times: [] });
+
+/* ------------------------------------------------------------------ */
+/* Arcade layer: lives, combo, a soft clock and a boss round.          */
+/* Ranked XP is unchanged; the arcade score sits on top of it.         */
+/* ------------------------------------------------------------------ */
+
+export const LIVES = 2;
+export const timeLimit = (step: number, total: number) => (step === total - 1 ? 30 : 45);
+const NOT_REACHED = -1;
+
+export type ArcadeLine = { base: number; combo: number; time: number; boss: boolean; total: number };
+
+/** Arcade score for the finished situations: 10× XP, a combo multiplier, time bonus, boss doubles. */
+export function arcade(results: ReviewItem[], times: (number | null)[], total: number) {
+  let combo = 0, best = 0, score = 0, lost = 0;
+  const lines: ArcadeLine[] = results.map((item, index) => {
+    const boss = index === total - 1;
+    if (!item.reached) return { base: 0, combo: 0, time: 0, boss, total: 0 };
+    if (!item.correct) { combo = 0; lost += 1; return { base: item.points * 10, combo: 0, time: 0, boss, total: 0 }; }
+    combo += 1;
+    best = Math.max(best, combo);
+    const multiplier = Math.min(combo, 3);
+    const seconds = times[index];
+    const left = seconds === null || seconds === undefined ? 0 : Math.max(0, timeLimit(index, total) - seconds);
+    const time = Math.round(left * 6);
+    const line = (item.points * 10 * multiplier + time) * (boss ? 2 : 1);
+    score += line;
+    return { base: item.points * 10, combo: multiplier, time, boss, total: line };
+  });
+  return { score, combo, best, lives: Math.max(0, LIVES - lost), lines };
+}
 
 const SKILL_FIELDS = [
   ["From", "Reply-To", "Sender", "Sender card", "Sender domain"],
@@ -54,6 +89,13 @@ function review(slug: string, state: MissionState, custom?: Scene[]): ReviewItem
   const all = custom ?? scenes[slug];
   return state.choices.map(([choice, checked, tagList], index) => {
     const scene = all[index];
+    if (choice === NOT_REACHED) {
+      return {
+        subject: scene.subject, action: "Not reached", consequence: "You ran out of lives before this situation.",
+        lesson: scene.lesson, correct: false, inspected: false, reached: false, points: 0, decisionPoints: 0, evidencePoints: 0,
+        clues: scene.clues.map(clue => ({ ...clue, tagged: false })),
+      };
+    }
     const action = scene.actions[choice];
     const tags = new Set(tagList);
     const indicators = new Set(scene.clues.flatMap((clue, i) => (clue.explanation ? [i] : [])));
@@ -74,6 +116,7 @@ function review(slug: string, state: MissionState, custom?: Scene[]): ReviewItem
       lesson: scene.lesson,
       correct: action.safe,
       inspected: checked,
+      reached: true,
       points: decisionPoints + evidencePoints,
       decisionPoints,
       evidencePoints,
@@ -87,6 +130,8 @@ export function scoreMission(slug: string, state: MissionState, custom?: Scene[]
   const results = review(slug, state, custom);
   const skills = Array.from({ length: 7 }, () => [0, 0, 0]);
   for (const result of results) {
+    // Situations never reached say nothing about the player’s skills.
+    if (!result.reached) continue;
     for (const clue of result.clues) {
       const skill = skills[skillIndex(clue.field)];
       if (clue.explanation) {
@@ -95,21 +140,26 @@ export function scoreMission(slug: string, state: MissionState, custom?: Scene[]
       } else skill[2] += Number(clue.tagged);
     }
   }
+  const reached = results.filter(item => item.reached);
   return {
-    answer: state.choices.at(-1)![0],
+    answer: state.choices.filter(choice => choice[0] !== NOT_REACHED).at(-1)?.[0] ?? 0,
     correct: results.every(item => item.correct),
     xp: results.reduce((sum, item) => sum + item.points, 0),
     scoringVersion,
-    learning: { skills, right: results.filter(item => item.correct).length, decisions: results.length },
+    arcade: arcade(results, state.times ?? [], results.length).score,
+    hooked: results.some(item => !item.reached),
+    learning: { skills, right: reached.filter(item => item.correct).length, decisions: reached.length },
   };
 }
 
-export function viewMission(slug: string, state: MissionState, custom?: Scene[], customSite?: Site): MissionView {
+export function viewMission(slug: string, state: MissionState, custom?: Scene[], customSite?: Site, now = Date.now()): MissionView {
   const all = custom ?? scenes[slug];
   const step = state.choices.length;
   const results = review(slug, state, custom);
   const score = scoreMission(slug, state, custom);
   const site = customSite ?? sites[slug];
+  const score_ = arcade(results, state.times ?? [], all.length);
+  const playing = state.started && !score;
   const base = {
     kind: "scenes" as const,
     slug,
@@ -123,6 +173,18 @@ export function viewMission(slug: string, state: MissionState, custom?: Scene[],
     correct: score?.correct ?? null,
     review: score ? results : null,
     scene: null,
+    arcade: {
+      score: score_.score,
+      combo: score_.combo,
+      best: score_.best,
+      lives: score_.lives,
+      livesMax: LIVES,
+      boss: playing && step === all.length - 1,
+      limit: playing ? timeLimit(step, all.length) : 0,
+      elapsed: playing && state.clockAt ? Math.max(0, Math.round((now - state.clockAt) / 1000)) : null,
+      lines: score_.lines,
+      hooked: Boolean(score?.hooked),
+    },
   };
   if (!state.started || score) return base;
   const scene = all[step];
@@ -149,19 +211,24 @@ export function viewMission(slug: string, state: MissionState, custom?: Scene[],
 
 export type MissionEvent =
   | { kind: "start"; stage: number }
+  | { kind: "begin"; stage: number }
   | { kind: "inspect"; stage: number }
   | { kind: "tag"; stage: number; clue: number; tagged: boolean }
   | { kind: "act"; stage: number; action: number };
 
 /** Applies one event. Stale or duplicate events (wrong stage) are ignored. */
-export function actMission(slug: string, state: MissionState, event: MissionEvent, custom?: Scene[]): MissionState {
+export function actMission(slug: string, state: MissionState, event: MissionEvent, custom?: Scene[], now = Date.now()): MissionState {
   const all = custom ?? scenes[slug];
   const step = state.choices.length;
   if (!Number.isInteger(event.stage) || event.stage !== step || step >= all.length) return state;
   const scene = all[step];
   switch (event.kind) {
     case "start":
-      return { ...state, started: true };
+      return { ...state, started: true, clockAt: now };
+    case "begin":
+      // The next situation’s clock starts when the player closes the feedback.
+      if (!state.started || state.clockAt) return state;
+      return { ...state, clockAt: now };
     case "inspect":
       if (!state.started) return state;
       return { ...state, checked: true };
@@ -174,7 +241,17 @@ export function actMission(slug: string, state: MissionState, event: MissionEven
     }
     case "act":
       if (!state.started || !Number.isInteger(event.action) || event.action < 0 || event.action >= scene.actions.length) return state;
-      return { started: true, checked: false, tags: [], choices: [...state.choices, [event.action, state.checked, state.tags]] };
+    {
+      const seconds = state.clockAt ? Math.round((now - state.clockAt) / 1000) : null;
+      const choices: MissionState["choices"] = [...state.choices, [event.action, state.checked, state.tags]];
+      const times = [...(state.times ?? []), seconds];
+      // Out of lives: the remaining situations are never reached.
+      const lost = choices.filter(([choice], i) => choice !== NOT_REACHED && !all[i].actions[choice].safe).length;
+      if (lost >= LIVES) {
+        while (choices.length < all.length) { choices.push([NOT_REACHED, false, []]); times.push(null); }
+      }
+      return { started: true, checked: false, tags: [], choices, times };
+    }
     default:
       return state;
   }
@@ -191,3 +268,18 @@ export function sceneCount(slug: string) {
 
 /** The inbox used as the home page for generated (Endless) missions. */
 export const endlessSite: Site = { ...sites["inbox-trap"], intro: "A fresh inbox, written just for this run. Anything could be in it." };
+
+/** A shuffled copy of a mission: situation, choice and clue order all change per run. */
+export function dealDeck(slug: string, random = Math.random): Scene[] | undefined {
+  const base = scenes[slug];
+  if (!base) return undefined;
+  const shuffle = <T,>(items: T[]) => {
+    const copy = items.slice();
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  };
+  return shuffle(base).map(scene => ({ ...scene, actions: shuffle(scene.actions), clues: shuffle(scene.clues) }));
+}

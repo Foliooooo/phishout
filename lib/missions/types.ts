@@ -13,6 +13,8 @@ export type ReviewItem = {
   lesson: string;
   correct: boolean;
   inspected: boolean;
+  /** False when the run ended (out of lives) before this situation. */
+  reached: boolean;
   points: number;
   decisionPoints: number;
   evidencePoints: number;
@@ -57,6 +59,24 @@ export type SceneMissionView = {
   correct: boolean | null;
   review: ReviewItem[] | null;
   scene: PublicScene | null;
+  arcade: ArcadeView;
+};
+
+export type ArcadeView = {
+  score: number;
+  combo: number;
+  best: number;
+  lives: number;
+  livesMax: number;
+  /** The current situation is the last, harder one. */
+  boss: boolean;
+  /** Soft clock for the current situation, in seconds (0 when not playing). */
+  limit: number;
+  /** Seconds already on the clock, measured by the server. */
+  elapsed: number | null;
+  lines: { base: number; combo: number; time: number; boss: boolean; total: number }[];
+  /** The run ended early because the player ran out of lives. */
+  hooked: boolean;
 };
 
 export type ChatView = {
