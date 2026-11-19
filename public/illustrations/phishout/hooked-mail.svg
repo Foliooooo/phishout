@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" role="img" aria-label="An envelope hanging from a fishing hook">
+  <!-- Backdrop that reads on pink and on paper. -->
+  <circle cx="204" cy="196" r="112" fill="#ffffff" fill-opacity="0.42"/>
+
+  <!-- Envelope, hanging from a punched hole in its top edge. -->
+  <g transform="rotate(-7 204 168)">
+    <rect x="118" y="168" width="172" height="112" rx="14" fill="#ffffff" stroke="#2b1d24" stroke-width="5"/>
+    <path d="M122 176l82 58 82-58" fill="none" stroke="#2b1d24" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="246" y="186" width="30" height="34" rx="4" fill="#ff5fa2"/>
+    <path d="M254 194h14M254 203h14M254 212h9" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="204" cy="184" r="7" fill="#2b1d24"/>
+  </g>
+
+  <!-- Line and a clear J-shaped hook through the hole. -->
+  <path d="M232 0v92" stroke="#2b1d24" stroke-width="4"/>
+  <circle cx="232" cy="96" r="6" fill="none" stroke="#2b1d24" stroke-width="4"/>
+  <path d="M232 102v68a28 28 0 0 1-56 0v-24" fill="none" stroke="#2b1d24" stroke-width="10" stroke-linecap="round"/>
+  <path d="M176 146l-13 15" stroke="#2b1d24" stroke-width="10" stroke-linecap="round"/>
+  <path d="M232 110v58" stroke="#ff5fa2" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Motion and confetti marks. -->
+  <path d="M74 236q14-10 28 0t28 0" fill="none" stroke="#2b1d24" stroke-width="4" stroke-linecap="round"/>
+  <path d="M300 118q12-9 24 0t24 0" fill="none" stroke="#2b1d24" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="334" cy="72" r="7" fill="#2b1d24"/>
+  <circle cx="96" cy="120" r="9" fill="none" stroke="#2b1d24" stroke-width="4"/>
+  <circle cx="330" cy="266" r="6" fill="#ffffff"/>
+</svg>

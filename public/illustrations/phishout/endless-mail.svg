@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="An endless loop of envelopes, each one new">
+  <path d="M120 150c0-50 70-50 80 0s80 50 80 0-70-50-80 0-80 50-80 0z" fill="none" stroke="#ffd3e4" stroke-width="34" stroke-linecap="round"/>
+  <path d="M120 150c0-50 70-50 80 0s80 50 80 0-70-50-80 0-80 50-80 0z" fill="none" stroke="#ff5fa2" stroke-width="4" stroke-dasharray="10 12"/>
+  <g stroke="#2b1d24" stroke-width="4" stroke-linejoin="round">
+    <g transform="translate(92 96) rotate(-14)"><rect width="64" height="44" rx="7" fill="#fff"/><path d="M3 4l29 21 29-21" fill="none"/></g>
+    <g transform="translate(240 92) rotate(12)"><rect width="64" height="44" rx="7" fill="#fff"/><path d="M3 4l29 21 29-21" fill="none"/></g>
+    <g transform="translate(168 170)"><rect width="64" height="44" rx="7" fill="#ff5fa2"/><path d="M3 4l29 21 29-21" fill="none" stroke="#fff"/></g>
+  </g>
+  <g fill="#2b1d24">
+    <circle cx="200" cy="52" r="7"/>
+    <circle cx="64" cy="210" r="6"/><circle cx="342" cy="214" r="9" fill="#ff5fa2"/>
+  </g>
+  <text x="200" y="262" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="18" font-weight="700" fill="#2b1d24">∞ new every time</text>
+</svg>

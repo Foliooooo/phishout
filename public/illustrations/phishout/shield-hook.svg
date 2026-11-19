@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="A shield that has bent a fishing hook">
+  <circle cx="200" cy="150" r="118" fill="#ffd3e4"/>
+  <path d="M200 46l90 30v62c0 62-44 98-90 116-46-18-90-54-90-116V76z" fill="#2b1d24"/>
+  <path d="M200 66l72 24v48c0 50-34 80-72 96z" fill="#3a2a31"/>
+  <path d="M164 150l26 26 48-56" fill="none" stroke="#3dd68c" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M330 30v54q0 22-20 26t-26-18" fill="none" stroke="#2b1d24" stroke-width="7" stroke-linecap="round"/>
+  <path d="M284 92l-8-12" stroke="#2b1d24" stroke-width="7" stroke-linecap="round"/>
+  <path d="M300 118l18 10M306 104l20-2" stroke="#ff5fa2" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="70" cy="80" r="7" fill="#ff5fa2"/><circle cx="84" cy="236" r="5" fill="#2b1d24"/>
+</svg>

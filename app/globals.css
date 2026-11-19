@@ -1,26 +1,122 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Theme is class-based: light by default, `.dark` on <html> for dark.
+   The tokens below flip, so components rarely need `dark:` at all. */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {
+  /* Surfaces: beige paper, darker for wells, lighter for raised cards */
+  --color-paper: #f4ebd9;
+  --color-paper-deep: #e9dcc3;
+  --color-paper-raised: #fbf5e9;
+
+  /* Text */
+  --color-ink: #2b1d24;
+  /* “Lab” surfaces on the architecture page: a cool, technical panel in both themes. */
+  --color-lab: #fbf7f1;
+  --color-lab-fg: #2b1d24;
+  --color-lab-strong: #1f1419;
+  --color-lab-text: #3f3238;
+  --color-lab-soft: #64555c;
+  --color-lab-faint: #8a7a82;
+  --color-ink-soft: #6f5f62;
+
+  /* Brand pink */
+  --color-brand: #ff5fa2;
+  --color-brand-deep: #e63d85;
+  --color-brand-soft: #ffd3e4;
+  --color-account-art: #f9cadc;
+  /* Text on brand / caution / safe / danger. Dark in both themes. */
+  --color-on-brand: #2b1d24;
+
+  /* Game feedback */
+  --color-safe: #3fbf7f;
+  --color-danger: #f0503c;
+  --color-caution: #f4c430;
+}
+
+:root {
+  color-scheme: light;
+  --pattern-scales: color-mix(in oklab, var(--color-brand) 28%, transparent);
+}
+
+/* Dark theme: the same tokens, re-pointed. */
+.dark {
+  color-scheme: dark;
+  --color-paper: #1c1317;
+  --color-paper-deep: #130c0f;
+  --color-paper-raised: #2b1e25;
+  --color-ink: #f6ecdd;
+  --color-lab: #0f0f12;
+  --color-lab-fg: #ffffff;
+  --color-lab-strong: #f4f4f5;
+  --color-lab-text: #d4d4d8;
+  --color-lab-soft: #a1a1aa;
+  --color-lab-faint: #71717a;
+  --color-ink-soft: #b9a7aa;
+  --color-brand-deep: #ff85b8;
+  --color-brand-soft: #5c2540;
+  --color-account-art: #e6a0bc;
+  --pattern-scales: color-mix(in oklab, var(--color-brand) 34%, transparent);
+}
+
+/* Theme switch: the new theme wipes in as a circle from the toggle.
+   The clip-path itself is animated from components/theme-toggle.tsx. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 500;
+}
+
+/* Depth comes from inset shadows only: a dark lip at the bottom and a
+   light highlight at the top. No borders, no outer shadows. */
+@utility depth {
+  box-shadow:
+    inset 0 -4px 0 0 rgb(0 0 0 / 0.16),
+    inset 0 2px 0 0 rgb(255 255 255 / 0.4);
+}
+
+/* Pressed state: the lip collapses and the top goes dark. */
+@utility depth-pressed {
+  box-shadow: inset 0 3px 0 0 rgb(0 0 0 / 0.18);
+}
+
+/* Sunken wells: inputs, slots, tracks. */
+@utility depth-sunken {
+  box-shadow: inset 0 3px 0 0 rgb(0 0 0 / 0.08);
+}
+
+/* Printing a certificate: only the certificate, on one landscape page. */
+@media print {
+  @page { size: A4 landscape; margin: 0; }
+  body:has(.certificate) * { visibility: hidden; }
+  body:has(.certificate) .certificate,
+  body:has(.certificate) .certificate * { visibility: visible; }
+  body:has(.certificate) .certificate { position: fixed; inset: 0; max-width: none; width: 100vw; height: 100vh; aspect-ratio: auto; }
 }

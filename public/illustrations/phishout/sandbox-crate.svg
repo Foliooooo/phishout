@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="A browser window sealed inside a sandbox crate">
+  <ellipse cx="200" cy="262" rx="150" ry="16" fill="#2b1d24" opacity="0.12"/>
+  <path d="M70 120l130-52 130 52v120l-130 22-130-22z" fill="#f4c430" stroke="#2b1d24" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M70 120l130 26 130-26M200 146v116" fill="none" stroke="#2b1d24" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M84 150l100 20M84 186l100 20M216 170l100-20M216 206l100-20" stroke="#2b1d24" stroke-width="3" opacity="0.35"/>
+  <g transform="translate(118 30) rotate(-6)">
+    <rect width="164" height="112" rx="12" fill="#fff" stroke="#2b1d24" stroke-width="5"/>
+    <path d="M0 26h164" stroke="#2b1d24" stroke-width="5"/>
+    <circle cx="16" cy="13" r="4" fill="#ff5fa2"/><circle cx="30" cy="13" r="4" fill="#2b1d24"/>
+    <rect x="18" y="44" width="80" height="10" rx="5" fill="#ffd3e4"/><rect x="18" y="64" width="128" height="8" rx="4" fill="#f4ebd9"/><rect x="18" y="80" width="104" height="8" rx="4" fill="#f4ebd9"/>
+  </g>
+  <g transform="translate(176 188)">
+    <rect width="48" height="40" rx="8" fill="#2b1d24"/>
+    <path d="M12 0v-12a12 12 0 0 1 24 0v12" fill="none" stroke="#2b1d24" stroke-width="7"/>
+    <circle cx="24" cy="18" r="5" fill="#ff5fa2"/><path d="M24 22v8" stroke="#ff5fa2" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <path d="M42 70h22M53 59v22" stroke="#ff5fa2" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="352" cy="84" r="10" fill="none" stroke="#2b1d24" stroke-width="4"/>
+</svg>
