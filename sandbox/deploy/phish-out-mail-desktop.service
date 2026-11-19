@@ -1,0 +1,18 @@
+[Unit]
+Description=PHISH OUT private training mailbox desktop
+After=network-online.target
+
+[Service]
+User=phish-mail
+Group=phish-mail
+Environment=HOME=/var/lib/phish-mail
+WorkingDirectory=/var/lib/phish-mail
+ExecStart=/usr/bin/tigervncserver :1 -fg -localhost yes -interface 127.0.0.1 -geometry 1440x900 -depth 24 -SecurityTypes VncAuth -PasswordFile /var/lib/phish-mail/vnc.passwd -xstartup /usr/local/libexec/phish-out-mail-desktop
+Restart=on-failure
+RestartSec=3
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+{
+  "DeveloperToolsAvailability": 2,
+  "BrowserGuestModeEnabled": false,
+  "BrowserAddPersonEnabled": false,
+  "IncognitoModeAvailability": 1,
+  "PasswordManagerEnabled": false,
+  "AutofillAddressEnabled": false,
+  "AutofillCreditCardEnabled": false,
+  "DownloadRestrictions": 3,
+  "NewTabPageLocation": "http://tabs.phishout.example:8080/",
+  "URLBlocklist": ["*", "chrome://extensions", "chrome://flags", "chrome://settings"],
+  "URLAllowlist": [
+    "http://tabs.phishout.example:8080/",
+    "http://mail.novabyte.example:8080", "http://news.dailybyte.example:8080",
+    "http://n0vabyte.example:8080", "http://accounts.novabyte.example:8080",
+    "http://secure-alerts.example:8080", "http://files.quickshare.example:8080",
+    "http://chat.novabyte.example:8080", "http://free-movies.example:8080",
+    "http://novabyte-login.example:8080", "http://fakestagram.example:8080",
+    "http://mail.fakestagram.example:8080", "http://fakestagram-session.example:8080"
+  ]
+}

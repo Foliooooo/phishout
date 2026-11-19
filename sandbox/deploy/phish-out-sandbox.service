@@ -1,0 +1,21 @@
+[Unit]
+Description=PHISH OUT sandbox controller
+Requires=docker.service
+After=docker.service
+
+[Service]
+User=ubuntu
+Group=ubuntu
+SupplementaryGroups=docker
+EnvironmentFile=/etc/phish-out-sandbox.env
+Environment=SANDBOX_BRIDGE_DIR=/run/phish-out-sandbox
+RuntimeDirectory=phish-out-sandbox
+RuntimeDirectoryMode=0700
+ExecStart=/opt/phish-out/phish-out-sandbox
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

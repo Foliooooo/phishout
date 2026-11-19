@@ -1,0 +1,4 @@
+PS1='\[\e[38;5;205m\]analyst\[\e[0m\]@forensics:\[\e[1m\]\W\[\e[0m\]$ '
+alias ls='ls --color=auto'
+cat "/case/${PHISHOUT_CASE}/README.txt" 2>/dev/null
+echo

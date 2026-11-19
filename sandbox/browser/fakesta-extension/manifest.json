@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "PHISH OUT Fakestagram Exercise",
+  "version": "1.0.0",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://fakestagram.example/direct/inbox"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+}

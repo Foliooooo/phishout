@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fakestagram</title>
+  <link rel="stylesheet" href="/fakesta.css">
+  <script src="/fakesta.js" defer></script>
+</head>
+<body data-mode="__MODE__">
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="camera" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.8h.01"/></symbol>
+    <symbol id="home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></symbol>
+    <symbol id="search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="chat" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 1 19 0 9 9 0 0 1-12 8L4 22l1-5a9 9 0 0 1-2-5Z"/><path d="m7 15 4-5 3 3 3-4"/></symbol>
+    <symbol id="heart" viewBox="0 0 24 24"><path d="M20.5 4.7a5 5 0 0 0-7 0L12 6l-1.5-1.3a5 5 0 1 0-7 7L12 20l8.5-8.3a5 5 0 0 0 0-7Z"/></symbol>
+    <symbol id="edit" viewBox="0 0 24 24"><path d="M11 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6M14 6l4 4m-7 6-4 1 1-4L18 3l4 4Z"/></symbol>
+    <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/></symbol>
+    <symbol id="smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14a4 4 0 0 0 8 0m-7-5h.01m6 0h.01"/></symbol>
+    <symbol id="mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  </svg>
+
+  <main class="dm-layout" id="chat-view">
+    <aside class="rail" aria-label="Fakestagram">
+      <span class="rail-brand"><svg><use href="#camera"/></svg></span>
+      <span title="Home"><svg><use href="#home"/></svg></span>
+      <span title="Search"><svg><use href="#search"/></svg></span>
+      <span title="Messages" class="selected"><svg><use href="#chat"/></svg></span>
+      <span title="Notifications"><svg><use href="#heart"/></svg></span>
+      <a class="rail-mail" href="http://mail.fakestagram.example:8080/inbox" target="_blank" rel="noopener" aria-label="Open mail in a new tab"><svg><use href="#mail"/></svg><i id="mail-dot" hidden></i></a>
+      <span class="avatar sam rail-profile">S</span>
+    </aside>
+    <aside class="threads">
+      <div class="thread-head"><strong>sam.jpg <small>⌄</small></strong><svg><use href="#edit"/></svg></div>
+      <label class="search">⌕ <input id="thread-search" type="search" placeholder="Search conversations" aria-label="Search conversations"></label>
+      <div class="thread-title"><b>Messages</b></div>
+      <button class="thread active" type="button" data-thread="riley" aria-pressed="true"><span class="avatar riley">R</span><div><strong>Riley</strong><span id="preview">hey you · now</span></div></button>
+      <button class="thread" type="button" data-thread="pizza" aria-pressed="false"><span class="avatar friends">P</span><div><strong>Pizza people</strong><span>Alex: same time? · 2h</span></div></button>
+      <button class="thread" type="button" data-thread="jordan" aria-pressed="false"><span class="avatar sam">J</span><div><strong>Jordan</strong><span>Sent you a reel · 1d</span></div></button>
+    </aside>
+    <section class="conversation" aria-label="Direct messages with Riley">
+      <header class="dm-head"><span id="contact-avatar" class="avatar riley">R</span><div><strong id="contact-name">Riley</strong><small id="contact-handle">riley.afterhours</small></div><button id="session" class="icon-button" aria-label="Show profile and session details"><svg><use href="#info"/></svg></button></header>
+      <div class="transcript" id="transcript" role="log" aria-label="Conversation">
+        <div class="profile"><span class="avatar riley">R</span><strong>Riley</strong><span>riley.afterhours · Fakestagram</span></div>
+        <p class="timestamp">Yesterday</p>
+        <p class="bubble outgoing">i’m still thinking about that chilli oil</p>
+        <p class="bubble incoming">okay glad it wasn’t just me</p>
+        <p class="timestamp">Today</p>
+        <fieldset id="plan-poll"><legend>Riley’s Saturday poll</legend><button type="button">Pizza on the roof</button> <button type="button">Night market</button><p aria-live="polite"></p></fieldset>
+        <p class="bubble incoming">hey you 👀</p>
+        <p class="bubble incoming">can you help me lock in a place and time for Saturday?</p>
+      </div>
+      <div class="transcript" id="side-transcript" role="log" aria-label="Conversation" hidden></div>
+      <p id="typing" class="typing" role="status"></p>
+      <form id="chat-form" class="composer">
+        <svg aria-hidden="true"><use href="#smile"/></svg><input id="message" disabled aria-label="Message Riley" placeholder="Message…" autocomplete="off" maxlength="180">
+        <button type="submit" class="plain">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <main id="mail-view" class="mail-layout">
+    <header><svg><use href="#mail"/></svg><strong>Mail</strong><span>sam@fakestagram.example</span></header>
+    <aside><strong>Inbox <span id="unread"></span></strong></aside>
+    <section>
+      <h1>Inbox</h1>
+      <button id="email" class="email" type="button" hidden>
+        <b>Fakestagram</b><span>Your Direct session</span><small>Just now</small>
+      </button>
+      <button class="email routine" type="button" data-mail="pizza"><b>South Street Pizza</b><span>Receipt for Saturday</span><small>Yesterday</small></button>
+      <button class="email routine" type="button" data-mail="library"><b>Maple Library</b><span>Your hold is ready</span><small>Monday</small></button>
+      <p id="empty" role="status" hidden></p>
+      <article id="routine-letter" hidden><h2 id="routine-subject"></h2><p id="routine-body"></p></article>
+      <article id="letter" hidden>
+        <h2>Your Direct session</h2>
+        <p><strong>Fakestagram</strong> <span class="muted">&lt;accounts@fakestagram-session.example&gt;</span></p>
+        <p>Hi Sam, we paused your Direct session when we couldn’t confirm your account. You can get back to your messages below.</p>
+        
+        <a class="blue" id="invite" href="http://fakestagram-session.example:8080/signup" target="_blank" rel="noopener">Return to Direct</a>
+        <button id="inspect" class="plain" type="button">Inspect link</button>
+        <p id="destination" class="destination" hidden>Destination: fakestagram-session.example/signup</p>
+      </article>
+    </section>
+  </main>
+
+  <main id="signup-view" class="auth-layout">
+    <section class="auth-box">
+      <div class="wordmark">Fakestagram</div>
+      <h1>Finish signing up</h1>
+      <p>Get back to the people and conversations you love.</p>
+      <form id="demo-form">
+        <label>Username <input id="demo-user" placeholder="Username" readonly autocomplete="off"></label>
+        <label>Password <input id="demo-pass" type="password" placeholder="Password" readonly autocomplete="off"></label>
+        <button id="fill-demo" class="plain" type="button">Use practice details</button>
+        <button id="signup-submit" class="blue" type="submit" disabled>Sign up</button>
+      </form>
+      <p class="demo-note">Sandbox demo fields. Real credentials can’t be entered.</p>
+    </section>
+  </main>
+
+  <dialog id="session-dialog" class="dialog">
+    <h2>Account session</h2>
+    <p>Signed in as <strong>sam.jpg</strong>. Your conversation is still here.</p>
+    <button id="report" type="button" class="blue">Report the suspicious email</button>
+    <button id="close-details" type="button" class="plain">Done</button>
+  </dialog>
+
+  <dialog id="ending" class="dialog">
+    <p class="debrief-tag">PHISH//OUT · DEBRIEF</p>
+    <h2 id="ending-title"></h2>
+    <p id="ending-copy"></p>
+    <p>The original Fakestagram tab stayed signed in. A training extension changed what the page displayed and delivered a message to the practice inbox. The signup page copied the brand on a different domain.</p>
+    <p>If a notice says you’re signed out, return to the original tab or a saved bookmark. Compare the link’s domain before you enter anything.</p>
+    <p id="ending-score"></p>
+    <ul id="score-breakdown"></ul>
+    <h3>Your path</h3><ol id="path"></ol>
+    <button id="rewind" type="button" class="plain">Rewind to the notice · unranked</button>
+    <button id="close-ending" type="button" class="blue">Back to the sandbox</button>
+  </dialog>
+</body>
+</html>

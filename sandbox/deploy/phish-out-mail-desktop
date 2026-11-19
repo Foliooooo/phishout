@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+openbox &
+exec google-chrome --user-data-dir="$HOME/chrome" --no-first-run --no-default-browser-check https://mail.google.com/

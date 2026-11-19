@@ -1,0 +1,19 @@
+[Unit]
+Description=PHISH//OUT terminal sandbox service
+After=docker.service
+Requires=docker.service
+
+[Service]
+User=ubuntu
+SupplementaryGroups=docker
+EnvironmentFile=/etc/phish-out-sandbox.env
+Environment=TERMINAL_RUNTIME=docker
+ExecStart=/usr/bin/python3 /opt/phish-out/terminal/service.py
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
