@@ -1,0 +1,936 @@
+{
+  "inbox-trap": [
+    {
+      "surface": "Novabyte Mail",
+      "address": "mail.novabyte.example/inbox",
+      "sender": "NovaByte HR Team · 10:04",
+      "entry": "Open message",
+      "subject": "Selected for NovaByte Summer Internship",
+      "message": "Congratulations, Sam. You’ve been shortlisted without an interview. Complete onboarding within 24 hours and pay a refundable $49 kit fee to reserve your place.",
+      "check": "Show message headers and link destination",
+      "evidence": "From novabyte.careers@freemail.example. Reply-To onboarding.desk@quickmail.example. The visible onboarding link points to novabyte.example.onboarding-desk.example.",
+      "actions": [
+        {
+          "label": "Open onboarding and pay fee",
+          "safe": false,
+          "consequence": "The payment request is controlled by an unrelated site. The simulation sent no payment."
+        },
+        {
+          "label": "Report phishing",
+          "safe": true,
+          "consequence": "The inbox flags the offer for the campus team and keeps the payment details private."
+        },
+        {
+          "label": "Verify with official Careers",
+          "safe": true,
+          "points": 20,
+          "consequence": "The official Careers page lists openings but has no record of this offer."
+        },
+        {
+          "label": "Archive offer",
+          "safe": true,
+          "points": 10,
+          "consequence": "You avoided the payment. The message was not reported, so others could still receive it."
+        }
+      ],
+      "lesson": "Check offers through the employer’s established careers site. Treat upfront payment and an unexpected shortlist as reasons to stop.",
+      "clues": [
+        {
+          "field": "From",
+          "value": "novabyte.careers@freemail.example",
+          "explanation": "A free-mail domain does not match the employer’s account."
+        },
+        {
+          "field": "Reply-To",
+          "value": "onboarding.desk@quickmail.example",
+          "explanation": "Replies go to a different sender on a different domain."
+        },
+        {
+          "field": "Selection",
+          "value": "Shortlisted without an interview",
+          "explanation": "There is no hiring process to verify in the employer’s portal."
+        },
+        {
+          "field": "Deadline",
+          "value": "Complete onboarding within 24 hours",
+          "explanation": "The deadline pressures you to skip independent checks."
+        },
+        {
+          "field": "Payment",
+          "value": "Refundable $49 kit fee",
+          "explanation": "An upfront fee is a strong warning sign in an internship offer."
+        },
+        {
+          "field": "Link destination",
+          "value": "https://novabyte.example.onboarding-desk.example/accept",
+          "explanation": "The destination belongs to onboarding-desk.example."
+        },
+        {
+          "field": "Role",
+          "value": "NovaByte Summer Internship",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Novabyte Mail",
+      "address": "mail.novabyte.example/inbox",
+      "sender": "Mira · 10:12",
+      "entry": "Open message",
+      "subject": "Calendar update",
+      "message": "The backlog is clearing. It might take a minute for new invites to appear. No action needed on your side.",
+      "check": "Open ticket activity",
+      "evidence": "NB-2041 → posted by Mira, Calendar team, at 10:12. The text matches this email.",
+      "actions": [
+        {
+          "label": "Archive update",
+          "safe": true,
+          "consequence": "The calendar finishes syncing."
+        },
+        {
+          "label": "Report as phishing",
+          "safe": false,
+          "consequence": "The service desk receives a report for its own verified update."
+        }
+      ],
+      "lesson": "Compare routine updates with the service you already trust. Reporting every unexpected email adds noise.",
+      "clues": [
+        {
+          "field": "Ticket record",
+          "value": "NB-2041 · Calendar team",
+          "explanation": null
+        },
+        {
+          "field": "Message",
+          "value": "No action needed on your side",
+          "explanation": null
+        },
+        {
+          "field": "Sender",
+          "value": "Mira · matches the ticket record",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Novabyte Mail",
+      "address": "mail.novabyte.example/inbox",
+      "sender": "Security Review · 10:16",
+      "entry": "Open message",
+      "subject": "Forward the original for analysis",
+      "message": "Could you forward the ticket thread and the login code sent around the same time? We’re looking at a wave of these.",
+      "check": "Open the employee handbook",
+      "evidence": "The handbook directs employees to the mail client’s Report phishing button. A support analyst never needs a login code.",
+      "actions": [
+        {
+          "label": "Forward thread and code",
+          "safe": false,
+          "consequence": "The simulated one-time code goes to the sender."
+        },
+        {
+          "label": "Report phishing",
+          "safe": true,
+          "consequence": "You report the email through the mail client. The code stays private."
+        }
+      ],
+      "lesson": "Use the reporting tool you already know. Treat login codes like passwords.",
+      "clues": [
+        {
+          "field": "Request",
+          "value": "Include the login code",
+          "explanation": "A code can approve somebody else's sign-in."
+        },
+        {
+          "field": "Reporting route",
+          "value": "Known Report phishing button",
+          "explanation": null
+        },
+        {
+          "field": "Sender domain",
+          "value": "novabyte-audit.example",
+          "explanation": "The audit address is outside the known employer domain."
+        }
+      ]
+    }
+  ],
+  "link-inspector": [
+    {
+      "surface": "Dailybyte Perks",
+      "address": "news.dailybyte.example/offers",
+      "sender": "Reader rewards",
+      "subject": "Your points are ready",
+      "message": "Pick how you want to use your points before the next issue goes out.",
+      "check": "Preview Redeem points destination",
+      "evidence": "https://dailybyte.example@perk-check.example/redeem",
+      "actions": [
+        {
+          "label": "Open Redeem points",
+          "safe": false,
+          "consequence": "The new tab loads perk-check.example."
+        },
+        {
+          "label": "Use saved Rewards bookmark",
+          "safe": true,
+          "consequence": "The bookmarked Dailybyte account opens on dailybyte.example."
+        }
+      ],
+      "lesson": "In this URL, text before @ is user information. The hostname starts after @.",
+      "clues": [
+        {
+          "field": "Redeem destination",
+          "value": "https://dailybyte.example@perk-check.example/redeem",
+          "explanation": "The hostname is perk-check.example. The text before @ is user information."
+        },
+        {
+          "field": "Bookmark",
+          "value": "dailybyte.example/rewards",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Dailybyte Events",
+      "address": "dailybyte.example/events",
+      "sender": "Workshop calendar",
+      "subject": "Design workshop",
+      "message": "Registration opened for Saturday’s workshop. Your seat is held until tonight.",
+      "check": "Preview Open registration destination",
+      "evidence": "https://events.dailybyte.example/workshops/design. The calendar entry on dailybyte.example lists the same link.",
+      "actions": [
+        {
+          "label": "Open registration",
+          "safe": true,
+          "consequence": "The confirmed events subdomain shows the workshop."
+        },
+        {
+          "label": "Flag calendar entry",
+          "safe": false,
+          "consequence": "You flagged a link listed on the official event calendar."
+        }
+      ],
+      "lesson": "Read the hostname from the right and use known context. events.dailybyte.example belongs to dailybyte.example.",
+      "clues": [
+        {
+          "field": "Workshop link",
+          "value": "https://events.dailybyte.example/workshops/design",
+          "explanation": null
+        },
+        {
+          "field": "Official calendar",
+          "value": "Matches the workshop destination",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Dailybyte newsletter",
+      "address": "news.dailybyte.example/issue/24",
+      "sender": "Issue 24",
+      "subject": "Member archive",
+      "message": "A shortcut is available for returning members.",
+      "check": "Preview Member archive destination",
+      "evidence": "https://members-check.example/dailybyte.example/login",
+      "actions": [
+        {
+          "label": "Open Member archive",
+          "safe": false,
+          "consequence": "The address bar shows members-check.example."
+        },
+        {
+          "label": "Find archive from Dailybyte home",
+          "safe": true,
+          "consequence": "Dailybyte’s own navigation takes you to the archive."
+        }
+      ],
+      "lesson": "A brand in the path comes after the hostname. It tells you nothing about who controls the page.",
+      "clues": [
+        {
+          "field": "Archive destination",
+          "value": "https://members-check.example/dailybyte.example/login",
+          "explanation": "The brand occurs in the path. The hostname is members-check.example."
+        },
+        {
+          "field": "Archive navigation",
+          "value": "Dailybyte home → Member archive",
+          "explanation": null
+        }
+      ]
+    }
+  ],
+  "spot-the-lookalike": [
+    {
+      "surface": "Novabyte Workspace",
+      "address": "n0vabyte.example/login",
+      "sender": "Recently opened tab",
+      "subject": "Your files",
+      "message": "Sign in to pick up where you left off.",
+      "check": "Compare saved workspace address",
+      "evidence": "Saved: novabyte.example/login. Open tab: n0vabyte.example/login.",
+      "actions": [
+        {
+          "label": "Close tab and open bookmark",
+          "safe": true,
+          "consequence": "Your files open through the saved workspace."
+        },
+        {
+          "label": "Continue in this tab",
+          "safe": false,
+          "consequence": "The simulated sign-in is hosted on a lookalike with a zero."
+        }
+      ],
+      "lesson": "One swapped letter or digit can change who receives the request.",
+      "clues": [
+        {
+          "field": "Address bar",
+          "value": "n0vabyte.example/login",
+          "explanation": "A zero replaces the letter o."
+        },
+        {
+          "field": "Bookmark",
+          "value": "novabyte.example/login",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Novabyte Travel",
+      "address": "novabyte.example.travel-auth.example/login",
+      "sender": "Travel reservation",
+      "subject": "Review your itinerary",
+      "message": "Your itinerary has an update. Sign in to view the revised booking.",
+      "check": "Show site certificate details",
+      "evidence": "The connection is encrypted. Certificate issued to travel-auth.example. Your saved travel portal is travel.novabyte.example.",
+      "actions": [
+        {
+          "label": "Continue on the encrypted page",
+          "safe": false,
+          "consequence": "Encryption protects traffic to travel-auth.example, which is a different service."
+        },
+        {
+          "label": "Open saved Travel portal",
+          "safe": true,
+          "consequence": "The trusted Novabyte portal shows the itinerary directly."
+        }
+      ],
+      "lesson": "HTTPS secures the connection to the displayed host. It does not vouch for the organization in the page title.",
+      "clues": [
+        {
+          "field": "Address bar",
+          "value": "novabyte.example.travel-auth.example/login",
+          "explanation": "The hostname belongs to travel-auth.example."
+        },
+        {
+          "field": "Connection",
+          "value": "Encrypted (TLS)",
+          "explanation": null
+        },
+        {
+          "field": "Bookmark",
+          "value": "travel.novabyte.example",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Novabyte Help",
+      "address": "help.novabyte.example/reset",
+      "sender": "Employee help center",
+      "subject": "Reset instructions",
+      "message": "You asked for account recovery through the company directory. Here are the instructions.",
+      "check": "Compare company directory entry",
+      "evidence": "Directory → Account Help: https://help.novabyte.example/reset. The request ID matches your ticket.",
+      "actions": [
+        {
+          "label": "Read reset instructions",
+          "safe": true,
+          "consequence": "The known help center shows your requested instructions."
+        },
+        {
+          "label": "Discard as lookalike",
+          "safe": false,
+          "consequence": "You closed a verified page for an action you initiated."
+        }
+      ],
+      "lesson": "Match the whole hostname and the task you expected. A legitimate subdomain may have an extra label.",
+      "clues": [
+        {
+          "field": "Address bar",
+          "value": "help.novabyte.example/reset",
+          "explanation": null
+        },
+        {
+          "field": "Request ID",
+          "value": "Matches your ticket",
+          "explanation": null
+        }
+      ]
+    }
+  ],
+  "double-trouble": [
+    {
+      "surface": "Novabyte Sign-in",
+      "address": "novabyte-login.example/signin",
+      "sender": "Project access",
+      "subject": "Continue to project files",
+      "message": "You’re switching projects. Confirm your account to open the shared folder.",
+      "check": "Open saved sign-in tab alongside",
+      "evidence": "Shared link tab: novabyte-login.example/signin. Saved tab: accounts.novabyte.example/signin. The pages use the same logo.",
+      "actions": [
+        {
+          "label": "Use this tab",
+          "safe": false,
+          "consequence": "The shared link is outside the company’s domain."
+        },
+        {
+          "label": "Switch to saved sign-in tab",
+          "safe": true,
+          "consequence": "The known account service shows the project picker."
+        }
+      ],
+      "lesson": "Two forms can look identical. Sign in through a saved destination.",
+      "clues": [
+        {
+          "field": "Shared tab",
+          "value": "novabyte-login.example/signin",
+          "explanation": "The shared tab uses a different domain."
+        },
+        {
+          "field": "Saved tab",
+          "value": "accounts.novabyte.example/signin",
+          "explanation": null
+        },
+        {
+          "field": "Logo",
+          "value": "Both tabs show the same logo",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Novabyte Sign-in",
+      "address": "novabyte-login.example/session",
+      "sender": "Autofill",
+      "subject": "Restore session",
+      "message": "The form is blank. A note suggests copying your saved password manually.",
+      "check": "Check saved password entry",
+      "evidence": "Your password manager lists accounts.novabyte.example. There’s no match for this page.",
+      "actions": [
+        {
+          "label": "Leave and open saved sign-in",
+          "safe": true,
+          "consequence": "Autofill is available on the saved account site."
+        },
+        {
+          "label": "Fill with practice password",
+          "safe": false,
+          "consequence": "The simulation shows what manual entry would have sent to the lookalike."
+        }
+      ],
+      "lesson": "Check the address when a familiar password manager refuses to fill a familiar account.",
+      "clues": [
+        {
+          "field": "Saved entry",
+          "value": "accounts.novabyte.example",
+          "explanation": null
+        },
+        {
+          "field": "Form request",
+          "value": "Copy the saved password manually",
+          "explanation": "The form tries to bypass the password manager’s origin checks."
+        }
+      ]
+    },
+    {
+      "surface": "Account Security",
+      "address": "accounts.novabyte.example/activity",
+      "sender": "Notification center",
+      "subject": "Approve sign-in?",
+      "message": "A new one-time code was requested just after you left the lookalike page.",
+      "check": "Review activity timeline",
+      "evidence": "Current device is already signed in. There’s a pending sign-in from a device you don’t recognize.",
+      "actions": [
+        {
+          "label": "Approve pending sign-in",
+          "safe": false,
+          "consequence": "A different simulated device is allowed in."
+        },
+        {
+          "label": "Deny request",
+          "safe": true,
+          "consequence": "The pending sign-in is rejected."
+        }
+      ],
+      "lesson": "Only approve sign-ins you initiated. The timing of a prompt can be part of the setup.",
+      "clues": [
+        {
+          "field": "Pending device",
+          "value": "New device you don’t recognize",
+          "explanation": "The attempted login was initiated from another device."
+        },
+        {
+          "field": "Current device",
+          "value": "Already signed in",
+          "explanation": null
+        },
+        {
+          "field": "Prompt",
+          "value": "Approve a sign-in you didn’t start",
+          "explanation": "An unsolicited approval can give someone else access."
+        }
+      ]
+    }
+  ],
+  "tick-tock": [
+    {
+      "surface": "Storage Notice",
+      "address": "secure-alerts.example/verify",
+      "sender": "Storage desk",
+      "subject": "Access expires in 02:00",
+      "message": "Confirm your account now to keep access to your saved documents.",
+      "check": "Open saved Storage status",
+      "evidence": "storage.novabyte.example/status → No pending account changes. Last checked just now.",
+      "actions": [
+        {
+          "label": "Continue in Storage",
+          "safe": true,
+          "consequence": "Your files are still available through the saved portal."
+        },
+        {
+          "label": "Use Restore access button",
+          "safe": false,
+          "consequence": "The warning leads to an unrelated account form."
+        }
+      ],
+      "lesson": "A countdown changes your attention, not the source. Take time to open the official service yourself.",
+      "clues": [
+        {
+          "field": "Countdown",
+          "value": "2 minutes to restore access",
+          "explanation": "The timer pressures you to skip verification."
+        },
+        {
+          "field": "Saved status",
+          "value": "No pending account changes",
+          "explanation": null
+        },
+        {
+          "field": "Sender",
+          "value": "secure-alerts.example",
+          "explanation": "This domain is separate from the official storage service."
+        }
+      ]
+    },
+    {
+      "surface": "Storage Status",
+      "address": "storage.novabyte.example/status",
+      "sender": "Workspace maintenance",
+      "subject": "Uploads paused at 18:00",
+      "message": "Scheduled maintenance starts soon. Leave unfinished uploads in your drafts.",
+      "check": "Open maintenance calendar",
+      "evidence": "The company calendar lists the same maintenance window and no sign-in requirement.",
+      "actions": [
+        {
+          "label": "Flag the maintenance notice",
+          "safe": false,
+          "consequence": "The notice was legitimate and matched the schedule."
+        },
+        {
+          "label": "Save uploads as drafts",
+          "safe": true,
+          "consequence": "Your work is saved while the scheduled maintenance begins."
+        }
+      ],
+      "lesson": "Real deadlines exist. Verify the context and follow the expected workflow.",
+      "clues": [
+        {
+          "field": "Calendar",
+          "value": "Matches the published maintenance window",
+          "explanation": null
+        },
+        {
+          "field": "Request",
+          "value": "Save unfinished uploads",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Storage Notice",
+      "address": "storage-renewals.example/restore",
+      "sender": "Storage renewals",
+      "subject": "One last step",
+      "message": "Support extended your deadline. Read back the code from your phone to close the request.",
+      "check": "Show what the code authorizes",
+      "evidence": "Code purpose: sign in to your workspace from a new browser. It does not authorize support tickets.",
+      "actions": [
+        {
+          "label": "Share practice code",
+          "safe": false,
+          "consequence": "The simulated new browser receives an approval code."
+        },
+        {
+          "label": "Report the follow-up",
+          "safe": true,
+          "consequence": "The support team receives the notice through its normal reporting tool."
+        }
+      ],
+      "lesson": "Read the stated purpose of a code. A caller’s description doesn’t change what the code authorizes.",
+      "clues": [
+        {
+          "field": "Request",
+          "value": "Read back the code from your phone",
+          "explanation": "Support should not request a sign-in code."
+        },
+        {
+          "field": "Code purpose",
+          "value": "Sign in from a new browser",
+          "explanation": "The code authorizes access to the account, not a support step."
+        },
+        {
+          "field": "Original portal",
+          "value": "Opened separately from your bookmark",
+          "explanation": null
+        }
+      ]
+    }
+  ],
+  "download-roulette": [
+    {
+      "surface": "Browser downloads",
+      "address": "files.quickshare.example/invoice",
+      "sender": "Vendor · January billing",
+      "entry": "View download",
+      "subject": "invoice.pdf",
+      "message": "Your monthly invoice is ready to view.",
+      "check": "Show file info",
+      "evidence": "Full filename: invoice.pdf.exe. File type: Windows executable.",
+      "actions": [
+        {
+          "label": "Discard file",
+          "safe": true,
+          "consequence": "The executable is removed from your downloads."
+        },
+        {
+          "label": "Open file",
+          "safe": false,
+          "consequence": "Opening this file would run a program. The exercise executed nothing."
+        }
+      ],
+      "lesson": "The last extension determines the actual type. A filename can contain several dots.",
+      "clues": [
+        {
+          "field": "File name",
+          "value": "invoice.pdf.exe",
+          "explanation": "The last extension is .exe. This can run a program."
+        },
+        {
+          "field": "Receipt label",
+          "value": "January billing",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Document preview",
+      "address": "files.quickshare.example/billing",
+      "sender": "Vendor · Revised total",
+      "entry": "Preview workbook",
+      "subject": "Q1-adjustments.xlsm",
+      "message": "The workbook preview is blank. Click Enable content to see the totals.",
+      "check": "Check company billing records",
+      "evidence": "Your finance workflow expects a PDF in the vendor portal. There is no scheduled spreadsheet update.",
+      "actions": [
+        {
+          "label": "Enable content",
+          "safe": false,
+          "consequence": "This would allow the workbook to run macros."
+        },
+        {
+          "label": "Request PDF through vendor portal",
+          "safe": true,
+          "consequence": "The vendor portal provides a plain copy through the established channel."
+        }
+      ],
+      "lesson": "A missing preview doesn’t justify running active content. Ask for a safer format through a known channel.",
+      "clues": [
+        {
+          "field": "File name",
+          "value": "Q1-adjustments.xlsm",
+          "explanation": "The file type supports macros."
+        },
+        {
+          "field": "Banner",
+          "value": "Enable content to see totals",
+          "explanation": "Enabling content can execute macros."
+        },
+        {
+          "field": "Known workflow",
+          "value": "Vendor portal provides an ordinary PDF",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Project downloads",
+      "address": "projects.novabyte.example/files",
+      "sender": "Project portal",
+      "entry": "View download",
+      "subject": "reference.pdf",
+      "message": "The reference sheet you requested is ready.",
+      "check": "Show file info and request ID",
+      "evidence": "reference.pdf · PDF document · Request NB-302 matches your portal activity.",
+      "actions": [
+        {
+          "label": "Open in browser viewer",
+          "safe": true,
+          "consequence": "The expected PDF opens in the browser viewer."
+        },
+        {
+          "label": "Discard expected PDF",
+          "safe": false,
+          "consequence": "The file matched the requested document and source."
+        }
+      ],
+      "lesson": "Verify source and file type together. A previous suspicious file doesn’t make an independently verified file suspicious.",
+      "clues": [
+        {
+          "field": "File type",
+          "value": "PDF document",
+          "explanation": null
+        },
+        {
+          "field": "Request ID",
+          "value": "NB-302 · matches your project portal",
+          "explanation": null
+        }
+      ]
+    }
+  ],
+  "whos-the-boss": [
+    {
+      "surface": "Novabyte Chat",
+      "address": "chat.novabyte.example/dm",
+      "sender": "Avery · Finance",
+      "subject": "Can you get the vendor paid?",
+      "message": "I’m boarding. Their bank changed this morning. Update the details from my message and let me know once it’s done.",
+      "check": "Open directory card",
+      "evidence": "This DM is from an external guest with Avery’s display name. Internal Finance lists a separate account and the formal vendor-change route.",
+      "actions": [
+        {
+          "label": "Submit change from DM",
+          "safe": false,
+          "consequence": "The payment workflow uses the unverified bank details."
+        },
+        {
+          "label": "Start verified vendor-change process",
+          "safe": true,
+          "consequence": "The payment stays paused until the vendor confirms through the established process."
+        }
+      ],
+      "lesson": "A display name is easy to copy. Payment changes need an independent approval path.",
+      "clues": [
+        {
+          "field": "Sender card",
+          "value": "External guest",
+          "explanation": "An external sender copied an internal name."
+        },
+        {
+          "field": "Request",
+          "value": "Change bank details from a DM",
+          "explanation": "The request bypasses the vendor approval workflow."
+        },
+        {
+          "field": "Shipment status",
+          "value": "Due on the afternoon truck",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Novabyte Chat",
+      "address": "chat.novabyte.example/dm",
+      "sender": "Avery · Voice message",
+      "entry": "Open voice message",
+      "subject": "About shipment 5862",
+      "message": "You recognize the voice. The sender knows the shipment number and asks you to keep the request private.",
+      "check": "Open shipment history",
+      "evidence": "Shipment 5862 appeared on the shared project board yesterday. The number is widely visible.",
+      "actions": [
+        {
+          "label": "Call Avery from employee directory",
+          "safe": true,
+          "consequence": "Avery says they didn’t send the voice message."
+        },
+        {
+          "label": "Accept the voice confirmation",
+          "safe": false,
+          "consequence": "The voice used a public detail that anybody on the project could have copied."
+        }
+      ],
+      "lesson": "Familiar voice and specific details are weak on their own. Call a number or contact you already trust.",
+      "clues": [
+        {
+          "field": "Shipment number",
+          "value": "5862 · visible on a shared board",
+          "explanation": null
+        },
+        {
+          "field": "Request",
+          "value": "Keep the change private",
+          "explanation": "Secrecy discourages independent verification."
+        },
+        {
+          "field": "Voice message",
+          "value": "Voice recognition is the only proof offered",
+          "explanation": "A familiar voice cannot establish approval."
+        }
+      ]
+    },
+    {
+      "surface": "Finance approvals",
+      "address": "finance.novabyte.example/approvals",
+      "sender": "Vendor records",
+      "subject": "Vendor change confirmed",
+      "message": "The finance portal shows a reviewed vendor change with an approval record.",
+      "check": "Check approval log",
+      "evidence": "Two expected reviewers approved. The vendor callback is logged and matches your established contact.",
+      "actions": [
+        {
+          "label": "Reject despite approval record",
+          "safe": false,
+          "consequence": "The expected checks had already verified the update."
+        },
+        {
+          "label": "Release through Finance",
+          "safe": true,
+          "consequence": "Payment moves through the normal Finance workflow."
+        }
+      ],
+      "lesson": "Complete a legitimate request once its independent checks are satisfied.",
+      "clues": [
+        {
+          "field": "Approval log",
+          "value": "Two expected reviewers",
+          "explanation": null
+        },
+        {
+          "field": "Vendor callback",
+          "value": "Matches the established vendor number",
+          "explanation": null
+        }
+      ]
+    }
+  ],
+  "popup-panic": [
+    {
+      "surface": "Movie player",
+      "address": "free-movies.example/watch",
+      "sender": "Browser permission",
+      "entry": "Play video",
+      "subject": "Allow notifications?",
+      "message": "The page behind the prompt says the video starts after you allow notifications.",
+      "check": "Show requesting site and permission",
+      "evidence": "free-movies.example wants notification permission. You only clicked Play.",
+      "actions": [
+        {
+          "label": "Block notifications",
+          "safe": true,
+          "consequence": "The site can’t send notifications to your browser."
+        },
+        {
+          "label": "Allow notifications",
+          "safe": false,
+          "consequence": "The site would be able to send alerts even after you leave the tab."
+        }
+      ],
+      "lesson": "Match the requested permission to the action you took. Playback doesn’t need notifications.",
+      "clues": [
+        {
+          "field": "Permission",
+          "value": "Send notifications",
+          "explanation": "Notifications are unrelated to the Play action."
+        },
+        {
+          "field": "Site",
+          "value": "free-movies.example",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Team call",
+      "address": "meet.novabyte.example/room",
+      "sender": "Browser permission",
+      "entry": "Unmute",
+      "subject": "Allow microphone?",
+      "message": "You clicked Unmute to speak in the team call you joined from your calendar.",
+      "check": "Show requesting site and permission",
+      "evidence": "meet.novabyte.example requests microphone access for the current meeting.",
+      "actions": [
+        {
+          "label": "Allow for this visit",
+          "safe": true,
+          "consequence": "Your microphone is available to the expected meeting."
+        },
+        {
+          "label": "Block microphone",
+          "safe": false,
+          "consequence": "You stay muted because the meeting has no microphone access."
+        }
+      ],
+      "lesson": "A permission makes sense when the site, timing, and requested capability match what you intended.",
+      "clues": [
+        {
+          "field": "Permission",
+          "value": "Use microphone after you clicked Unmute",
+          "explanation": null
+        },
+        {
+          "field": "Site",
+          "value": "meet.novabyte.example · the meeting you joined",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Recording upload",
+      "address": "call-share.example/upload",
+      "sender": "Browser permission",
+      "entry": "Open recording",
+      "subject": "Share your screen?",
+      "message": "The meeting ended. A new tab claims it needs full-screen sharing to upload the recording.",
+      "check": "Check origin and selected scope",
+      "evidence": "call-share.example requests the entire screen. The organizer’s meeting page shows no upload request.",
+      "actions": [
+        {
+          "label": "Share entire screen",
+          "safe": false,
+          "consequence": "The new origin could view every visible window, not only the meeting."
+        },
+        {
+          "label": "Cancel share",
+          "safe": true,
+          "consequence": "The new page receives no screen access."
+        }
+      ],
+      "lesson": "A context switch and broad access are reasons to stop. Confirm the workflow with the organizer.",
+      "clues": [
+        {
+          "field": "Site",
+          "value": "call-share.example",
+          "explanation": "The request came from a different site after the call."
+        },
+        {
+          "field": "Scope",
+          "value": "Share the entire screen",
+          "explanation": "Full-screen sharing exposes all visible windows and is unnecessary here."
+        },
+        {
+          "field": "Organizer",
+          "value": "No upload request in the meeting page",
+          "explanation": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,69 +1,107 @@
-import Image from "next/image";
+import { GameCard } from "@/components/game-card";
+import { Hero } from "@/components/hero";
+import { PlayerGuide } from "@/components/player-guide";
+import { ScrollReveal } from "@/components/scroll-reveal";
+import { Ticker } from "@/components/ticker";
+import { games } from "@/lib/games";
+import Link from "next/link";
+import { buttonStyles } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const steps = [
+  {
+    mark: "01",
+    title: "Pick a mission",
+    body: "Open a fresh Chromium sandbox on our VM and start with a message, a browser prompt, or a familiar-looking page.",
+    tone: "bg-paper-raised",
+  },
+  {
+    mark: "02",
+    title: "Poke around",
+    body: "Open the mail, preview the links, or check the request through a saved site. Every message and action is simulated.",
+    tone: "bg-brand-soft",
+  },
+  {
+    mark: "03",
+    title: "Get the debrief",
+    body: "See what you caught, what caught you, and why. Your best result from each mission goes toward your rank.",
+    tone: "bg-brand text-on-brand",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="flex flex-1 flex-col">
+      <Hero slugs={games.map((game) => game.slug)} />
+
+      <Ticker
+        className="mt-10"
+        words={["Pause", "Inspect", "Verify", "Report"]}
+      />
+
+      <div className="mx-auto w-full max-w-6xl px-3 pt-12 sm:px-4">
+        <PlayerGuide />
+      </div>
+
+      <section
+        id="games"
+        className="mx-auto w-full max-w-6xl scroll-mt-24 px-3 pt-16 sm:px-4"
+      >
+        <ScrollReveal>
+          <div data-reveal className="mb-8 px-2">
+            <h2 className="text-4xl font-bold tracking-tight sm:text-6xl">
+              Start an investigation.
+            </h2>
+            <p className="mt-2 text-lg text-ink-soft">
+              {games.length} missions based on situations you might run into online.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3"><Link href="/games/crush-switch/play" className={buttonStyles()}>Play Crush Switch</Link><Link href="/games" className={buttonStyles({variant:"secondary"})}>All missions</Link></div>
+          </div>
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {games.map((game, index) => (
+              <li
+                key={game.slug}
+                data-reveal
+                className={cn(index === 0 && "sm:col-span-2")}
+              >
+                <GameCard game={game} featured={index === 0} />
+              </li>
+            ))}
+          </ul>
+        </ScrollReveal>
+      </section>
+
+      <section
+        id="how"
+        className="mx-auto w-full max-w-6xl scroll-mt-24 px-3 pt-24 sm:px-4"
+      >
+        <ScrollReveal>
+          <h2
+            data-reveal
+            className="mb-8 px-2 text-4xl font-bold tracking-tight sm:text-6xl"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            A browser you&rsquo;re allowed to break.
+          </h2>
+          <ol className="grid gap-4 md:grid-cols-3">
+            {steps.map((step) => (
+              <li
+                key={step.mark}
+                data-reveal
+                className={cn("rounded-3xl p-6 sm:p-8", step.tone)}
+              >
+                <span className="font-mono text-6xl font-bold tracking-tighter">
+                  {step.mark}
+                </span>
+                <h3 className="mt-6 text-2xl font-bold tracking-tight">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-base">{step.body}</p>
+              </li>
+            ))}
+          </ol>
+        </ScrollReveal>
+      </section>
+
+    </main>
   );
 }

@@ -1,0 +1,234 @@
+{
+  "inbox-trap": {
+    "name": "Novabyte Mail",
+    "kind": "mail",
+    "section": "Inbox",
+    "account": "sam@novabyte.example",
+    "rows": [
+      [
+        "Campus IT",
+        "Calendar ticket received",
+        "9:12 AM",
+        "We received ticket NB-2041. You can check its status from the service desk bookmark."
+      ],
+      [
+        "Mira",
+        "Thursday lunch",
+        "Yesterday",
+        "I put the menu in the shared folder. Let me know if you want anything."
+      ],
+      [
+        "Campus Library",
+        "Your hold is ready",
+        "Monday",
+        "Your book is ready at the front desk through Friday."
+      ]
+    ],
+    "task": "Sync inbox",
+    "intro": "You’ve signed in to check for a reply about your calendar.",
+    "address": "mail.novabyte.example/inbox"
+  },
+  "link-inspector": {
+    "name": "Dailybyte",
+    "kind": "news",
+    "section": "Today’s edition",
+    "account": "Reader account",
+    "rows": [
+      [
+        "City desk",
+        "Night market opens Friday",
+        "4 min read",
+        "The market will run along Cedar Lane from six until ten. Admission is free."
+      ],
+      [
+        "Culture",
+        "Inside the community print studio",
+        "6 min read",
+        "The studio has a Saturday open house with free demonstrations."
+      ],
+      [
+        "Dailybyte",
+        "Your saved articles",
+        "2 saved",
+        "Your saved edition and workshop calendar are available from this account."
+      ]
+    ],
+    "task": "Open Reader Perks",
+    "intro": "You’ve been saving reader points. Check what they can get you.",
+    "address": "news.dailybyte.example/offers"
+  },
+  "spot-the-lookalike": {
+    "name": "Novabyte Workspace",
+    "kind": "workspace",
+    "section": "Shared files",
+    "account": "sam · Student team",
+    "rows": [
+      [
+        "Team share",
+        "Project brief",
+        "Edited today",
+        "The design team is collecting feedback before Friday’s review."
+      ],
+      [
+        "Operations",
+        "Travel calendar",
+        "Shared yesterday",
+        "Check the workspace directory for travel and help resources."
+      ],
+      [
+        "Workspace",
+        "Company directory",
+        "Pinned",
+        "Official services are listed under novabyte.example."
+      ]
+    ],
+    "task": "Open shared workspace link",
+    "intro": "Your group sent a new link to the folder you need.",
+    "address": "novabyte.example/files"
+  },
+  "double-trouble": {
+    "name": "Novabyte Projects",
+    "kind": "workspace",
+    "section": "Project dashboard",
+    "account": "sam · Engineering",
+    "rows": [
+      [
+        "Design",
+        "Website refresh",
+        "Active",
+        "The team has posted approved concepts and the next review agenda."
+      ],
+      [
+        "Engineering",
+        "Internal tools",
+        "Active",
+        "Logins for internal files use the Novabyte account service."
+      ],
+      [
+        "Security",
+        "Your devices",
+        "2 devices",
+        "This browser and your student laptop are already recognized."
+      ]
+    ],
+    "task": "Open a new project",
+    "intro": "Switch projects to review a shared folder.",
+    "address": "projects.novabyte.example/dashboard"
+  },
+  "tick-tock": {
+    "name": "Novabyte Storage",
+    "kind": "storage",
+    "section": "My files",
+    "account": "3.2 GB available",
+    "rows": [
+      [
+        "Recent",
+        "Project notes",
+        "1 KB",
+        "Draft notes from the last project meeting."
+      ],
+      [
+        "Draft",
+        "Application review",
+        "2 KB",
+        "Your review is saved as a draft."
+      ],
+      [
+        "Status",
+        "Maintenance calendar",
+        "18:00",
+        "Uploads are scheduled to pause at 18:00. Existing files stay available."
+      ]
+    ],
+    "task": "Resume draft upload",
+    "intro": "You’ve got a document to upload before the end of the day.",
+    "address": "storage.novabyte.example/files"
+  },
+  "download-roulette": {
+    "name": "Quickshare Files",
+    "kind": "storage",
+    "section": "Shared with you",
+    "account": "Vendor folder",
+    "rows": [
+      [
+        "Preview",
+        "December invoice.pdf",
+        "PDF",
+        "December invoice · $120.00 · paid."
+      ],
+      [
+        "Preview",
+        "Supplier contact.txt",
+        "Text",
+        "Use the Finance directory to confirm a supplier contact."
+      ],
+      [
+        "Folder",
+        "Billing archive",
+        "2 items",
+        "Previous invoices are listed here for reference."
+      ]
+    ],
+    "task": "Open new delivery",
+    "intro": "Your vendor normally shares the invoice through this folder.",
+    "address": "files.quickshare.example/invoice"
+  },
+  "whos-the-boss": {
+    "name": "Novabyte Chat",
+    "kind": "chat",
+    "section": "Direct messages",
+    "account": "sam · Finance Ops",
+    "rows": [
+      [
+        "Mina",
+        "Handover",
+        "9:18 AM",
+        "I’ve finished the morning reconciliation. The approval queue is yours."
+      ],
+      [
+        "Shipping",
+        "Dispatch desk",
+        "9:02 AM",
+        "Shipment 5862 is due on the afternoon truck."
+      ],
+      [
+        "Finance",
+        "Approvals",
+        "Pinned",
+        "Changes to payment details go through the vendor approval workflow."
+      ]
+    ],
+    "task": "Open newest DM",
+    "intro": "You’re covering the finance queue while the team is out.",
+    "address": "chat.novabyte.example/dm"
+  },
+  "popup-panic": {
+    "name": "Orchard Video",
+    "kind": "media",
+    "section": "Watch",
+    "account": "Up next",
+    "rows": [
+      [
+        "Orchard Video",
+        "City after dark",
+        "04:12",
+        "A short documentary about late-night vendors."
+      ],
+      [
+        "Orchard Video",
+        "How coffee is roasted",
+        "06:35",
+        "A guided visit to a neighborhood roaster."
+      ],
+      [
+        "Orchard Video",
+        "Weekend routes",
+        "03:08",
+        "Three walks you can take without leaving town."
+      ]
+    ],
+    "task": "Open City after dark",
+    "intro": "Pick up where you left off.",
+    "address": "free-movies.example/watch"
+  }
+}
