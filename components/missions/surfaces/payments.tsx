@@ -3,6 +3,7 @@
 import type { Skin, SurfaceProps } from "../scene-player";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef } from "react";
 import { ArrowDownIcon, ArrowUpIcon, ChatIcon, Icon, LockCloseIcon, PhoneIcon, QrIcon, WalletIcon } from "../icon";
 import { Avatar, InspectButton, senderParts } from "./shared";
 
@@ -19,14 +20,21 @@ function PaymentsSurface({ view, scene, site, busy, opened, open, start, inspect
   const kind = scene ? kindOf(scene.surface) : null;
   const who = scene ? senderParts(scene.sender) : null;
   const showing = Boolean(scene && opened);
+  const details = useRef<HTMLDivElement>(null);
+  const inspected = Boolean(scene?.inspected);
+
+  // After the check, bring the details into view inside the phone.
+  useEffect(() => {
+    if (inspected) details.current?.scrollIntoView({ block: "nearest", behavior: still ? "auto" : "smooth" });
+  }, [inspected, view.step, still]);
 
   return (
-    // items-start lets the card grow with its content, so the outer area scrolls
-    // on short screens instead of the card clipping its own buttons.
-    <div className="flex h-full items-start justify-center overflow-y-auto overscroll-contain bg-[#eceaf3] px-2 py-3 text-[#1b1530] sm:px-3 sm:py-4">
-      <div className="relative flex min-h-full w-full max-w-[420px] flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_8px_40px_rgba(27,21,48,0.12)] ring-1 ring-black/5">
+    // The phone fills the frame: its middle scrolls and the choices stay pinned at
+    // the bottom, so nothing is ever cut off, on a desktop or a small phone.
+    <div className="flex h-full justify-center bg-[#eceaf3] px-2 py-2 text-[#1b1530] sm:px-3 sm:py-4">
+      <div className="relative flex h-full w-full max-w-[420px] flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_8px_40px_rgba(27,21,48,0.12)] ring-1 ring-black/5 sm:rounded-[28px]">
         {/* App bar */}
-        <header className="flex items-center gap-3 px-5 pt-5 pb-4 text-white" style={{ background: BRAND }}>
+        <header className="flex shrink-0 items-center gap-3 px-4 py-3 text-white sm:px-5 sm:pt-5 sm:pb-4" style={{ background: BRAND }}>
           <span className="flex size-9 items-center justify-center rounded-xl bg-white/15 text-[15px] font-bold">P</span>
           <div className="min-w-0 flex-1 leading-tight">
             <p className="text-[16px] font-semibold">{site.name}</p>
@@ -38,6 +46,7 @@ function PaymentsSurface({ view, scene, site, busy, opened, open, start, inspect
         <AnimatePresence mode="wait" initial={false}>
           {showing && scene && kind && who ? (
             <motion.div key={`open-${view.step}`} className="flex min-h-0 flex-1 flex-col" initial={still ? false : { opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.2 }}>
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
               {kind === "call" ? (
                 <div className="flex flex-col items-center bg-[#1b1530] px-6 pt-8 pb-6 text-center text-white">
                   <Avatar name={who.name} size={72} />
@@ -55,7 +64,7 @@ function PaymentsSurface({ view, scene, site, busy, opened, open, start, inspect
                 </div>
               )}
 
-              <div className="flex-1 space-y-3 px-5 py-4">
+              <div className="space-y-3 px-4 py-4 sm:px-5">
                 {kind === "sms" ? (
                   <>
                     <p className="max-w-[85%] rounded-2xl rounded-tl-sm bg-[#f1eff7] px-4 py-2.5 text-[14px]"><b className="block text-[12px] text-[#6b6383]">SMS</b>{scene.subject}</p>
@@ -80,7 +89,7 @@ function PaymentsSurface({ view, scene, site, busy, opened, open, start, inspect
 
                 <InspectButton scene={scene} onInspect={inspect} busy={busy} className="border-[#d9d3ec] text-[#5b3cc4] hover:bg-[#f6f4fb]" />
                 {scene.inspected && scene.clues && (
-                  <div className="rounded-2xl border border-[#e3dff0] border-l-4 px-4 py-3 text-[13px]" style={{ borderLeftColor: BRAND }}>
+                  <div ref={details} className="rounded-2xl border border-[#e3dff0] border-l-4 px-4 py-3 text-[13px]" style={{ borderLeftColor: BRAND }}>
                     <p className="mb-1.5 text-[12px] font-semibold text-[#6b6383]">{scene.evidence}</p>
                     <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
                       {scene.clues.map(clue => <div key={clue.field} className="contents"><dt className="text-[#6b6383]">{clue.field}</dt><dd>{clue.value}</dd></div>)}
@@ -89,7 +98,10 @@ function PaymentsSurface({ view, scene, site, busy, opened, open, start, inspect
                 )}
               </div>
 
-              <div className="space-y-2 border-t border-[#ece9f5] px-5 py-4">
+              </div>
+
+              {/* Choices: always visible at the bottom of the phone. */}
+              <div className="shrink-0 space-y-2 border-t border-[#ece9f5] bg-white px-4 py-3 shadow-[0_-6px_16px_rgba(27,21,48,0.06)] sm:px-5">
                 <p className="text-[12px] text-[#6b6383]">What do you do?</p>
                 {scene.actions.map((label, index) => (
                   <button key={label} type="button" disabled={busy} onClick={() => act(index)} className="flex min-h-11 w-full items-center justify-center rounded-xl border border-[#d9d3ec] px-4 py-2 text-center text-[14px] font-semibold transition-colors hover:bg-[#f6f4fb] disabled:opacity-50">
@@ -99,7 +111,7 @@ function PaymentsSurface({ view, scene, site, busy, opened, open, start, inspect
               </div>
             </motion.div>
           ) : (
-            <motion.div key="home" className="flex min-h-0 flex-1 flex-col" initial={false} exit={{ opacity: 0 }}>
+            <motion.div key="home" className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain" initial={false} exit={{ opacity: 0 }}>
               {/* Notification sliding in over the home screen. */}
               <AnimatePresence>
                 {scene && kind && who && !opened && (
