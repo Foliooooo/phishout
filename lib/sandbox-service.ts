@@ -33,7 +33,7 @@ export type SandboxStatus = {
 
 /** Live VM capacity from the controller’s /status. Offline (not an error) when the VM is off. */
 export async function sandboxStatus(): Promise<SandboxStatus> {
-  const offline: SandboxStatus = { online: false, max: 6, active: 0, idleLimitSeconds: 90, lifetimeSeconds: 720, sessions: [] };
+  const offline: SandboxStatus = { online: false, max: 4, active: 0, idleLimitSeconds: 90, lifetimeSeconds: 720, sessions: [] };
   if (!sandboxConfigured()) return offline;
   const response = await sandboxRequest("/status", "status", { signal: AbortSignal.timeout(3_000) });
   if (!response.ok) {

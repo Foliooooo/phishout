@@ -191,7 +191,7 @@ export function SandboxBrowser({
               ) : (
               <div className="relative max-w-md rounded-3xl bg-paper-raised p-6 text-center sm:p-9">
                 <h2 className="text-3xl font-bold tracking-tight">
-                  {status === "busy" ? "All six browsers are busy." : status === "ended" ? "Sandbox connection ended." : "No browser available."}
+                  {status === "busy" ? "All four browsers are busy." : status === "ended" ? "Sandbox connection ended." : "No browser available."}
                 </h2>
                 <p className="mt-3 text-ink-soft">
                   {status === "ended" ? streamProblem : "Try again in a moment, or close this window to return to the mission."}

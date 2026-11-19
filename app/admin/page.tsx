@@ -48,7 +48,7 @@ async function AdminContent() {
       <section className="mt-4 rounded-2xl bg-paper-deep p-4">
         <h2 className="text-xl font-bold">Connect to the desktop</h2>
         <p className="mt-2 text-ink-soft">Use your EC2 SSH key to open the tunnel and keep it running while connected.</p>
-        <code className="mt-3 block overflow-x-auto rounded-xl bg-paper-raised p-3 font-mono text-sm">ssh -i /path/to/key.pem -N -L 127.0.0.1:5901:127.0.0.1:5901 ubuntu@65.0.123.34</code>
+        <code className="mt-3 block overflow-x-auto rounded-xl bg-paper-raised p-3 font-mono text-sm">ssh -i /path/to/key.pem -N -L 127.0.0.1:5901:127.0.0.1:5901 ubuntu@13.202.101.96</code>
         <p className="mt-3 text-ink-soft">Read the desktop password in a separate SSH session, then enter it in your VNC client.</p>
         <code className="mt-3 block overflow-x-auto rounded-xl bg-paper-raised p-3 font-mono text-sm">sudo cat /var/lib/phish-mail/vnc-client-password</code>
       </section>

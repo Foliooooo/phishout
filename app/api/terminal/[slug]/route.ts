@@ -77,7 +77,7 @@ export async function POST(request: Request, context: RouteContext<"/api/termina
       const others = await runs().find({ userId: who.userId, kind: "terminal", completedAt: { $exists: false }, _id: { $ne: run._id }, updatedAt: { $gt: new Date(now.getTime() - 3600_000) } }, { projection: { _id: 1 } }).toArray();
       await Promise.all(others.map(other => terminalRequest(`/sessions/${other._id}`, who.sessionId, { method: "DELETE" })));
       const started = await terminalRequest("/sessions", who.sessionId, { method: "POST", body: JSON.stringify({ id: run._id, case: who.slug }) });
-      if (started.status === 429) return Response.json({ error: "All six terminals are busy. Try again in a minute.", vm: true }, { status: 429 });
+      if (started.status === 429) return Response.json({ error: "All four terminals are busy. Try again in a minute.", vm: true }, { status: 429 });
       if (started.status === 409) return Response.json({ error: "You already have a terminal open in another tab. Close it first.", vm: true }, { status: 409 });
       if (!started.ok) return Response.json({ error: "The terminal VM isn’t reachable right now.", vm: false }, { status: 503 });
       return Response.json(payload(run));

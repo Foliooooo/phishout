@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
  * because the controller reports only "starting" and "live".
  */
 const STEPS = [
-  ["alloc", "Reserving one of 6 sandbox slots"],
+  ["alloc", "Reserving one of 4 sandbox slots"],
   ["docker", "Creating a disposable container (no network, capped CPU and memory)"],
   ["profile", "Mounting a fresh browser profile that is deleted on exit"],
   ["display", "Starting a virtual display"],

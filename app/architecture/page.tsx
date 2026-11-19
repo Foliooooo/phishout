@@ -37,7 +37,7 @@ export default function ArchitecturePage() {
         <section id="fleet" className="scroll-mt-28 border-t border-lab-fg/[0.06] px-5 py-10 sm:px-10">
           <LabFade>
             <SectionTitle eyebrow="Live VM" title="The sandbox fleet">
-              Six disposable Chromium browsers on one VM, streamed to players as video. This panel reads the controller’s status live.
+              Four disposable Chromium browsers on one VM, streamed to players as video. This panel reads the controller’s status live.
             </SectionTitle>
             <SandboxFleet />
           </LabFade>

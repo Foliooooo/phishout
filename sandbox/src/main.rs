@@ -25,7 +25,7 @@ use tokio::{
 };
 use uuid::Uuid;
 
-const MAX_SESSIONS: usize = 6;
+const MAX_SESSIONS: usize = 4;
 const IDLE: Duration = Duration::from_secs(90);
 const LIFETIME: Duration = Duration::from_secs(12 * 60);
 const LABEL: &str = "io.phishout.sandbox=1";
@@ -254,7 +254,7 @@ async fn launch(
             return Err((StatusCode::CONFLICT, "close your existing sandbox first"));
         }
         if slots.len() >= MAX_SESSIONS {
-            return Err((StatusCode::TOO_MANY_REQUESTS, "all six browsers are busy"));
+            return Err((StatusCode::TOO_MANY_REQUESTS, "all four browsers are busy"));
         }
         let slot = Arc::new(Slot {
             owner: owner.to_owned(),

@@ -69,7 +69,7 @@ Signed-in players can set a display name and upload a profile photo at `/profile
 ## Endless mode and the VM
 
 - **Endless mode** (`/games/endless`) asks Gemini for a new three-email mission each time: one genuine email and two phishing, each using a different trick. The server validates every field before play: only `.example` hosts in URLs and email addresses, no real top-level domains, a safe action in each situation, and an ordinary clue in each. Generation takes about 15 seconds and is limited to once per 30 seconds per player. Runs are unranked but feed the skill predictions.
-- **VM**: the sandbox VM is at `65.0.123.34`, reached through the SSH tunnel in `sandbox/deploy/com.phishout.vm-tunnel.plist`. `/api/sandbox/status` reports capacity for the live fleet panel on `/architecture`. It uses the controller’s new `/status` route (in `sandbox/src/main.rs`), and against an older controller it reports only whether `/health` answers.
+- **VM**: the sandbox VM is at `13.202.101.96`, reached through the SSH tunnel in `sandbox/deploy/com.phishout.vm-tunnel.plist`. `/api/sandbox/status` reports capacity for the live fleet panel on `/architecture`. It uses the controller’s new `/status` route (in `sandbox/src/main.rs`), and against an older controller it reports only whether `/health` answers.
 
 ## Scripts
 
@@ -80,7 +80,7 @@ Signed-in players can set a display name and upload a profile photo at `/profile
 
 ## Sandbox capacity
 
-The Rust allocator enforces a hard maximum of six simultaneous sandboxes.
+The Rust allocator enforces a hard maximum of four simultaneous sandboxes.
 Game guides are available under `/games`.
 
 ## Photo credits

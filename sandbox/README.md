@@ -5,7 +5,7 @@ controller. NextAuth supplies the owner for every launch, video, and input
 request. MongoDB keeps mission results. Total XP adds up each player's best
 score per mission, so repeating a mission cannot inflate the total.
 
-The controller allocates up to six disposable Chromium containers, with one
+The controller allocates up to four disposable Chromium containers, with one
 per authenticated app session. Each launches the real Chromium window in an
 isolated X11 display. FFmpeg encodes that full display as a continuous 720p
 H.264 stream at a target of 15 fps. The viewer plays fragmented MP4 through
@@ -128,7 +128,7 @@ loading the file into the user's LaunchAgents.
 a real bash shell per player in a disposable container with `--network none`,
 a read-only root and case folder, all capabilities dropped,
 `no-new-privileges`, and limits of 64 processes, 128 MB memory and half a CPU.
-It allows six shells at once and one per app session. Shells close after
+It allows four shells at once and one per app session. Shells close after
 5 idle minutes or 20 minutes in total, and leftovers are removed on restart.
 Answers are graded by the web app, never inside the container.
 

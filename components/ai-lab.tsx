@@ -78,7 +78,7 @@ const TRACES: { id: string; label: string; steps: { part: Part; text: string }[]
   { id: "sandbox", label: "Launch a sandbox", steps: [
     { part: "browser", text: "You open a real-browser mission." },
     { part: "server", text: "The server records the attempt and asks the VM controller for a slot, bound to your session." },
-    { part: "vm", text: "The Rust controller allows six at once and one per player, then starts an offline Chromium container." },
+    { part: "vm", text: "The Rust controller allows four at once and one per player, then starts an offline Chromium container." },
     { part: "browser", text: "H.264 video streams in; your mouse and keyboard go back over a private socket." },
     { part: "mongo", text: "When you close it, the score is read from the isolated fixture and saved; the container is destroyed." },
   ] },
@@ -199,7 +199,7 @@ function useSandboxStatus() {
     const load = () => fetch("/api/sandbox/status", { cache: "no-store" })
       .then(response => response.json())
       .then(data => { if (live) setStatus(data); })
-      .catch(() => { if (live) setStatus(current => current ?? { online: false, max: 6, active: 0, idleLimitSeconds: 90, lifetimeSeconds: 720, sessions: [] }); });
+      .catch(() => { if (live) setStatus(current => current ?? { online: false, max: 4, active: 0, idleLimitSeconds: 90, lifetimeSeconds: 720, sessions: [] }); });
     void load();
     const timer = setInterval(load, 5_000);
     return () => { live = false; clearInterval(timer); };
@@ -223,7 +223,7 @@ export function SandboxFleet() {
           <span className="text-[13px] text-lab-soft tabular-nums">{status?.active ?? 0} of {max} sandboxes in use</span>
           <span className="ml-auto flex items-center gap-1.5 text-[12px] text-lab-faint"><Icon icon={RefreshIcon} size={13} />live, every 5 s</span>
         </div>
-        <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+        <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {Array.from({ length: max }, (_, index) => {
             const session = status?.sessions[index];
             const game = session && getGame(session.slug);
@@ -613,7 +613,7 @@ export function NetworkLab() {
 
 /** Headline numbers for the page hero. */
 export function LabStats() {
-  const stats: [string, string][] = [[String(games.length), "missions"], ["2", "levels to a certificate"], [String(BADGES.length), "badges"], ["7", "skills predicted"], ["6", "isolated sandboxes"]];
+  const stats: [string, string][] = [[String(games.length), "missions"], ["2", "levels to a certificate"], [String(BADGES.length), "badges"], ["7", "skills predicted"], ["4", "isolated sandboxes"]];
   return (
     <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-lab-fg/[0.06] sm:grid-cols-5">
       {stats.map(([value, label]) => (

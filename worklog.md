@@ -227,3 +227,8 @@
 - Rebuilt Pip in Blender as a dusty-rose dinosaur hatchling with sculpted tiger stripes, round monkey ears and a curled tail. Added a lowering jaw and extending canines to the scary pose, and replaced swimming with bouncing. Checked all three expression presets and the bounce control in Chrome.
 - Sculpted curved calf horns, a pink bovine muzzle, broad ears, cub shoulders and animated padded bear paws onto Pip’s striped dinosaur body. Updated the Blender source, GLB and mascot page. Exercised all three expressions and Bounce in Chrome.
 - Simplified Pip’s Blender silhouette around two cream horns and a curled tail. Removed the layered stripes, dorsal plates, claws and individual finger pads. Kept the facial expression animation.
+
+### VM resized and moved (2026-11-19)
+- Downsized from m8a.xlarge (4 vCPU, 16 GB) to t3a.large (2 vCPU, 8 GB). The public IP changed to 13.202.101.96.
+- Docker, the sandbox controller, the terminal service, the frontend and Mongo all came back on boot with no changes.
+- Repointed the macOS tunnel agent (old file kept as `.bak-65.0.123.34`), the README and the admin VNC command.

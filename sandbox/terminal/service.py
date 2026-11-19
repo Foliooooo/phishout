@@ -42,7 +42,7 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-MAX_SESSIONS = 6
+MAX_SESSIONS = 4
 IDLE_SECONDS = 5 * 60
 LIFETIME_SECONDS = 20 * 60
 BUFFER_LIMIT = 512 * 1024
