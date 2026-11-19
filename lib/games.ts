@@ -187,6 +187,24 @@ export const games: Game[] = [
     ],
   },
   {
+    slug: "refund-rush",
+    title: "Refund Rush",
+    blurb: "“I sent you money by mistake, please send it back.” Did anything actually arrive?",
+    glyph: "₹?",
+    skill: "Payments",
+    tone: "caution",
+    scales: "vertical",
+    startUrl: "pay.paypocket.example/home",
+    playable: true,
+    mode: "native",
+    objective: "Handle a “wrong transfer” refund request without losing money.",
+    instructions: [
+      "Open the SMS and the messages from the stranger who says they paid you by mistake.",
+      "Check your own balance and the details of any request before you act.",
+      "Decide whether to send, approve, decline or report.",
+    ],
+  },
+  {
     slug: "header-hunt",
     title: "Header Hunt",
     blurb: "Three raw emails, a real shell and a few minutes. Grep your way to the phish.",
@@ -353,6 +371,15 @@ const LEARNING: Record<string, GameLearning> = {
       "Report impersonation through the app you already trust, not the link you were sent.",
     ],
     realWorld: "Romance scams, fake account-recovery emails and session-hijack lures on social apps.",
+  },
+  "refund-rush": {
+    skills: ["Sender", "Requests", "Urgency", "Authority"],
+    takeaways: [
+      "Trust the balance in your own payments app, never an SMS or a screenshot saying money arrived.",
+      "You never enter a UPI PIN to receive money. A collect request takes money out.",
+      "If a stranger’s money really lands, don’t move it yourself: tell your bank, and report pressure calls to 1930.",
+    ],
+    realWorld: "“Sent to the wrong number” UPI scams, fake credit SMS, refund collect requests and fake police calls.",
   },
   "header-hunt": {
     skills: ["Sender", "Links", "Trust"],

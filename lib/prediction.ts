@@ -39,9 +39,9 @@ type Attempt = { slug: string; completedAt: Date; learning?: Learning };
 const SKILL_MISSIONS: Record<string, string[]> = {
   Sender: ["inbox-trap", "whos-the-boss", "tick-tock"],
   Links: ["link-inspector", "spot-the-lookalike", "double-trouble", "crush-switch"],
-  Urgency: ["tick-tock", "inbox-trap"],
-  Authority: ["whos-the-boss", "popup-panic"],
-  Requests: ["inbox-trap", "popup-panic", "double-trouble", "tick-tock"],
+  Urgency: ["tick-tock", "inbox-trap", "refund-rush"],
+  Authority: ["whos-the-boss", "popup-panic", "refund-rush"],
+  Requests: ["refund-rush", "inbox-trap", "popup-panic", "double-trouble", "tick-tock"],
   Attachments: ["download-roulette"],
   Trust: ["crush-switch", "spot-the-lookalike", "link-inspector"],
 };

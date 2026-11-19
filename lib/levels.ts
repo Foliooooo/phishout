@@ -3,7 +3,7 @@
 export type Level = "novice" | "expert";
 
 /** Starter missions. Clearing all of them unlocks Expert. */
-export const NOVICE_MISSIONS = ["crush-switch", "inbox-trap", "link-inspector", "spot-the-lookalike", "popup-panic"] as const;
+export const NOVICE_MISSIONS = ["crush-switch", "inbox-trap", "link-inspector", "spot-the-lookalike", "popup-panic", "refund-rush"] as const;
 
 /** Harder missions, plus Endless mode, open once Novice is cleared. */
 export const EXPERT_MISSIONS = ["double-trouble", "tick-tock", "whos-the-boss", "download-roulette", "header-hunt", "payload-autopsy"] as const;

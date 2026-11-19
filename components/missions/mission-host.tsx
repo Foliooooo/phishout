@@ -9,6 +9,7 @@ import { downloadSkin } from "./surfaces/downloads";
 import { loginSkin } from "./surfaces/login";
 import { mailSkin } from "./surfaces/mail";
 import { newsSkin } from "./surfaces/news";
+import { paymentsSkin } from "./surfaces/payments";
 import { permissionSkin } from "./surfaces/permission";
 import { twinSkin } from "./surfaces/twin";
 
@@ -21,6 +22,7 @@ const SKINS: Record<string, Skin> = {
   "download-roulette": downloadSkin,
   "whos-the-boss": chatSkin,
   "popup-panic": permissionSkin,
+  "refund-rush": paymentsSkin,
 };
 
 /** Plays a mission directly in this browser tab. */

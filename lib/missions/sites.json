@@ -230,5 +230,34 @@
     "task": "Open City after dark",
     "intro": "Pick up where you left off.",
     "address": "free-movies.example/watch"
+  },
+  "refund-rush": {
+    "name": "Paypocket",
+    "kind": "payments",
+    "section": "Home",
+    "account": "Balance Rs 12,450",
+    "rows": [
+      [
+        "Chai Point",
+        "Paid",
+        "Today 9:12",
+        "Rs 40"
+      ],
+      [
+        "Meera",
+        "Received",
+        "Yesterday",
+        "Rs 350 for movie tickets"
+      ],
+      [
+        "Metro Card",
+        "Paid",
+        "Yesterday",
+        "Rs 200 top-up"
+      ]
+    ],
+    "task": "Open Paypocket",
+    "intro": "Your payments app. Something new is waiting.",
+    "address": "pay.paypocket.example/home"
   }
 }

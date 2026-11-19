@@ -932,5 +932,142 @@
         }
       ]
     }
+  ],
+  "refund-rush": [
+    {
+      "surface": "Messages",
+      "address": "pay.paypocket.example/home",
+      "sender": "+91 98••• •4410 · Unknown number",
+      "entry": "Open SMS",
+      "subject": "Rs 4,999 credited to A/c XX4321",
+      "message": "An SMS says Rs 4,999 was credited to your account by UPI. A minute later the same number messages you: “Bhai, I sent 4,999 to the wrong number by mistake. It’s my mother’s hospital fee. Please send it back to 98xxxx4410@okpay, fast.”",
+      "check": "Check balance in Paypocket",
+      "evidence": "Your Paypocket balance and history show no Rs 4,999 credit. The “bank” SMS came from a personal mobile number.",
+      "actions": [
+        {
+          "label": "Send Rs 4,999 back",
+          "safe": false,
+          "consequence": "You sent Rs 4,999 of your own money. Nothing had ever arrived: the SMS was fake."
+        },
+        {
+          "label": "Check my own balance, then tell them to contact their bank",
+          "safe": true,
+          "consequence": "No credit in your account, so there is nothing to return. A real mistake is fixed by the sender’s bank."
+        }
+      ],
+      "lesson": "Trust the balance in your own app, never an SMS or a screenshot. Mistaken transfers are reversed by banks, not by you.",
+      "clues": [
+        {
+          "field": "Sender",
+          "value": "SMS from +91 98••• •4410",
+          "explanation": "Banks send credit alerts from short sender IDs like AX-BANKNM, not a personal phone number."
+        },
+        {
+          "field": "Payment",
+          "value": "Paypocket balance: unchanged, no Rs 4,999 credit",
+          "explanation": "The only proof that matters is your own account. It shows nothing arrived."
+        },
+        {
+          "field": "Deadline",
+          "value": "“Hospital fee, please send it back fast”",
+          "explanation": "An emotional story plus a rush is there to stop you checking."
+        },
+        {
+          "field": "Reference",
+          "value": "UPI ref 3021 8834 1190",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Collect request",
+      "address": "pay.paypocket.example/requests",
+      "sender": "Refund Desk · refunddesk@okpocket",
+      "entry": "Open request",
+      "subject": "Approve to receive your Rs 4,999 refund",
+      "message": "The same person writes: “No problem, I raised a refund for you. Just approve the request and enter your PIN to receive it.” A Paypocket request appears: Refund Desk, Rs 4,999. Enter UPI PIN to approve.",
+      "check": "View request details",
+      "evidence": "It is a collect request. Approving it pays Rs 4,999 from your account to refunddesk@okpocket.",
+      "actions": [
+        {
+          "label": "Enter PIN to receive the refund",
+          "safe": false,
+          "consequence": "Rs 4,999 left your account. A UPI PIN is only ever used to send money."
+        },
+        {
+          "label": "Decline the request and block the sender",
+          "safe": true,
+          "consequence": "Nothing leaves your account, and they can’t send you more requests."
+        }
+      ],
+      "lesson": "You never enter a UPI PIN to receive money. A PIN means money is going out.",
+      "clues": [
+        {
+          "field": "Request",
+          "value": "Type: collect request (pay from your account)",
+          "explanation": "Receiving money never needs your approval or PIN. A collect request takes money out."
+        },
+        {
+          "field": "Payment",
+          "value": "Debit Rs 4,999 to refunddesk@okpocket",
+          "explanation": "The screen says debit: the money goes out, not in."
+        },
+        {
+          "field": "Sender",
+          "value": "refunddesk@okpocket · UPI ID created today",
+          "explanation": "A “refund desk” with a brand-new personal UPI ID is not a real support team."
+        },
+        {
+          "field": "Note",
+          "value": "Note: “refund”",
+          "explanation": null
+        }
+      ]
+    },
+    {
+      "surface": "Call",
+      "address": "pay.paypocket.example/history",
+      "sender": "Inspector Rao · Cyber Cell",
+      "entry": "Answer call",
+      "subject": "Return the money or face a police case",
+      "message": "This time Rs 8,000 really did arrive, from someone called Kiran S. you don’t know. A caller says he is from the cyber cell: the money was sent by mistake, and you must move it to a “safe account” within 30 minutes or your account will be frozen and a case filed.",
+      "check": "Check the transaction details",
+      "evidence": "The Rs 8,000 credit is real, from an account you don’t know. The caller wants it sent to a different UPI ID, not back to the sender.",
+      "actions": [
+        {
+          "label": "Transfer Rs 8,000 to the account he gives",
+          "safe": false,
+          "consequence": "If the money came from a hacked account, you just helped move stolen money, and your account is now in the trail."
+        },
+        {
+          "label": "Send nothing. Tell your bank and call 1930",
+          "safe": true,
+          "consequence": "Your bank reverses a genuine mistake through official channels. 1930 is India’s national cybercrime helpline."
+        }
+      ],
+      "lesson": "Real money from a stranger is the most dangerous kind. Don’t move it yourself: let your bank reverse it, and report pressure calls to 1930.",
+      "clues": [
+        {
+          "field": "Role",
+          "value": "Caller says he’s “Inspector Rao, Cyber Cell”",
+          "explanation": "Police don’t phone you to ask for transfers. Anyone can claim a title on a call."
+        },
+        {
+          "field": "Payment",
+          "value": "Send to: safe.account7@okpocket (not the sender)",
+          "explanation": "A genuine return goes back to the sender through the bank, never to a new “safe” account."
+        },
+        {
+          "field": "Deadline",
+          "value": "“Within 30 minutes, or your account is frozen”",
+          "explanation": "Threats and deadlines are pressure, not procedure."
+        },
+        {
+          "field": "Credit",
+          "value": "Rs 8,000 from Kiran S. · ref 4471 0092 3381",
+          "explanation": null
+        }
+      ]
+    }
   ]
 }
