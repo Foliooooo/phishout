@@ -4,6 +4,7 @@ import type { Learning } from "@/lib/learning";
 import { BADGES, EXPERT_MISSIONS, NOVICE_MISSIONS, PASS_XP, isSuperAdmin, levelOf, type Level } from "@/lib/levels";
 import { getDatabase } from "@/lib/mongodb";
 import { getProfile } from "@/lib/profiles";
+import { inPartyWith } from "@/lib/party";
 
 type Row = { slug: string; completedAt: Date; xp?: number; learning?: Learning; hintsUsed?: number; display?: string };
 
@@ -128,7 +129,9 @@ export const lockedMessage = "Clear every Novice mission (50+ XP each) to unlock
 export async function missionLocked(userId: string, email: string | null | undefined, slug: string) {
   if (isSuperAdmin(email)) return false;
   if (slug !== "endless" && levelOf(slug) === "novice") return false;
-  return !canPlay(await getProgress(userId, email), slug);
+  if (canPlay(await getProgress(userId, email), slug)) return false;
+  // An open LAN party opens its missions to every member.
+  return !await inPartyWith(userId, slug);
 }
 
 export type Certificate = {

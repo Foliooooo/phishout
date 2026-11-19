@@ -9,6 +9,7 @@ import { getGame } from "@/lib/games";
 import { PageLoader } from "@/components/ascii-canvas";
 import { LockedMission } from "@/components/progress";
 import { canPlay, getProgress } from "@/lib/progress";
+import { inPartyWith } from "@/lib/party";
 
 async function Play({ params, searchParams }: PageProps<"/games/[slug]/play">) {
   const { slug } = await params;
@@ -20,7 +21,7 @@ async function Play({ params, searchParams }: PageProps<"/games/[slug]/play">) {
   if (!session?.user.id || !session.sessionId) redirect(`/sign-in?next=${encodeURIComponent(`/games/${slug}/play`)}`);
 
   const progress = await getProgress(session.user.id, session.user.email);
-  if (!canPlay(progress, slug)) return <LockedMission game={game} progress={progress} />;
+  if (!canPlay(progress, slug) && !await inPartyWith(session.user.id, slug)) return <LockedMission game={game} progress={progress} />;
 
   if (game.mode === "terminal") return <TerminalMission game={game} />;
 

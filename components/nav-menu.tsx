@@ -17,6 +17,7 @@ export type NavAccount = { name: string; photo: string | null } | null;
 const MAIN = [
   { href: "/games", label: "Games" },
   { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/party", label: "Party" },
   { href: "/architecture", label: "How the AI works" },
 ];
 
