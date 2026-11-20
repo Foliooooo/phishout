@@ -4,6 +4,7 @@ import { playerAlias } from "@/lib/leaderboard";
 import { PASS_XP } from "@/lib/levels";
 import { getDatabase } from "@/lib/mongodb";
 import { avatarUrl, getProfiles } from "@/lib/profiles";
+import { insights, type Run } from "@/lib/impact";
 
 /**
  * LAN parties: a host opens a room with a short code, everyone at the event
@@ -147,4 +148,14 @@ export async function partyLeaderboard(party: Party, viewerId?: string | null): 
     if (row.score !== previous) { rank = index + 1; previous = row.score; }
     return { rank, name: row.name, avatar: row.avatar, score: row.score, xp: row.xp, cleared: row.cleared, runs: row.runs, lastAt: row.lastAt, you: row.userId === viewerId };
   });
+}
+
+/** Where this room slips: skills and missions, from members’ runs during the party. */
+export async function partyInsights(party: Party) {
+  const runs = await getDatabase().collection<Run>("browser_attempts")
+    .find(
+      { userId: { $in: party.members.map(member => member.userId) }, slug: { $in: party.missions }, completedAt: { $gte: party.createdAt, $lte: party.endsAt } },
+      { projection: { _id: 0, userId: 1, slug: 1, completedAt: 1, xp: 1, learning: 1 } },
+    ).toArray();
+  return insights(runs);
 }

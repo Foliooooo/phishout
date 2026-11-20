@@ -7,7 +7,8 @@ import { PageLoader } from "@/components/ascii-canvas";
 import { PartyBoard } from "@/components/party-board";
 import { Button, buttonStyles } from "@/components/ui/button";
 import { endlessGame, getGame } from "@/lib/games";
-import { getParty, isOpen, normalizeCode, partyLeaderboard } from "@/lib/party";
+import { getParty, isOpen, normalizeCode, partyInsights, partyLeaderboard } from "@/lib/party";
+import { SkillBars } from "@/components/skill-bars";
 import { joinUrl } from "@/lib/party-url";
 import { brandedQrSvg } from "@/lib/qr";
 import { cn } from "@/lib/utils";
@@ -33,7 +34,7 @@ async function Room({ params }: PageProps<"/party/[code]">) {
   const member = Boolean(userId && party.members.some(item => item.userId === userId));
   const host = userId === party.hostId;
   const open = isOpen(party);
-  const rows = await partyLeaderboard(party, userId);
+  const [rows, room] = await Promise.all([partyLeaderboard(party, userId), partyInsights(party)]);
   const url = await joinUrl(code);
   const qr = brandedQrSvg(url, { size: 512, margin: 2 });
   const missions = party.missions.map(slug => (slug === "endless" ? endlessGame : getGame(slug))).filter(Boolean);
@@ -83,6 +84,31 @@ async function Room({ params }: PageProps<"/party/[code]">) {
       ) : null}
 
       <PartyBoard code={code} initial={{ name: party.name, open, endsAt: party.endsAt.toISOString(), members: party.members.length, rows }} />
+
+      <section aria-labelledby="room" className="rounded-3xl bg-paper-raised p-5 sm:p-6">
+        <h2 id="room" className="text-2xl font-bold">Where this room slips</h2>
+        {room.runs ? (
+          <>
+            <p className="mt-1 text-ink-soft">From {room.runs} {room.runs === 1 ? "run" : "runs"} by {room.players} {room.players === 1 ? "player" : "players"} during this party. Use it to pick what to talk about after the session.</p>
+            <SkillBars skills={room.skills} className="mt-5" />
+            {room.missions.length ? (
+              <div className="mt-6">
+                <h3 className="font-bold">Toughest missions in this room</h3>
+                <ul className="mt-2 space-y-1.5">
+                  {room.missions.slice(0, 3).map(mission => (
+                    <li key={mission.slug} className="flex flex-wrap justify-between gap-2 rounded-2xl bg-paper px-4 py-2.5 text-sm">
+                      <span className="font-semibold">{mission.title}</span>
+                      <span className="text-ink-soft tabular-nums">average {mission.averageXp} XP · {Math.round(mission.passRate * 100)}% cleared · {mission.runs} {mission.runs === 1 ? "run" : "runs"}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <p className="mt-1 text-ink-soft">Once people finish party missions, this shows which warning signs the room misses most.</p>
+        )}
+      </section>
     </div>
   );
 }
