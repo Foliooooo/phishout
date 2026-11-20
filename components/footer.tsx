@@ -31,6 +31,9 @@ export function Footer({ className }: { className?: string }) {
             <nav aria-label="Footer" className="flex flex-wrap items-start gap-2 sm:justify-end">
               <Link href="/games" className={buttonStyles()}>Games</Link>
               <Link href="/leaderboard" className={buttonStyles({ variant: "raised" })}>Leaderboard</Link>
+              <Link href="/game-info" className={buttonStyles({ variant: "raised" })}>Game info</Link>
+              <Link href="/impact" className={buttonStyles({ variant: "raised" })}>Impact</Link>
+              <Link href="/for-teams" className={buttonStyles({ variant: "raised" })}>For teams</Link>
               <Link href="/#how" className={buttonStyles({ variant: "raised" })}>
                 How it works
               </Link>

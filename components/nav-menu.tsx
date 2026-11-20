@@ -18,6 +18,8 @@ const MAIN = [
   { href: "/games", label: "Games" },
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/party", label: "Party" },
+  { href: "/impact", label: "Impact" },
+  { href: "/for-teams", label: "For schools and teams" },
   { href: "/architecture", label: "How the AI works" },
 ];
 

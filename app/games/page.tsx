@@ -72,6 +72,7 @@ export default function GamesPage() {
         <div>
           <h2 className="text-2xl font-bold">Then: your certificate</h2>
           <p className="mt-1 text-ink-soft">Clear both levels and get a certificate with an ID anyone can verify.</p>
+          <Link href="/game-info" className="mt-2 inline-block font-semibold underline underline-offset-4">Compare every game in one table</Link>
         </div>
         <Link href="/certificate" className={buttonStyles()}>See the certificate</Link>
       </section>
